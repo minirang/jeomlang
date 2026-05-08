@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/jeom_ide.html"
+      "destination": "/ide/jeom_ide.html"
     }
   ]
 }
