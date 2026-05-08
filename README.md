@@ -1,7 +1,7 @@
 # jeomlang
 
 <p align="center">
-  <img src="logo_animated.svg" alt="Jeom Logo" width="96">
+  <img src="img/logo_animated.svg" alt="Jeom Logo" width="96">
 </p>
 
 > 점 유니코드 문자 **16종**만으로 프로그래밍하는 난해 언어  
