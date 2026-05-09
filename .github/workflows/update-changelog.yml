@@ -19,20 +19,27 @@ jobs:
 
       - name: Append release to CHANGELOG
         run: |
+          mkdir -p docs
+
+          touch docs/CHANGELOG.md
+
           echo "## ${{ github.event.release.tag_name }} - ${{ github.event.release.published_at }}" > temp.md
           echo "" >> temp.md
           echo "${{ github.event.release.body }}" >> temp.md
           echo "" >> temp.md
-          cat CHANGELOG.md >> temp.md
-          mv temp.md CHANGELOG.md
+
+          cat docs/CHANGELOG.md >> temp.md
+
+          mv temp.md docs/CHANGELOG.md
 
       - name: Commit CHANGELOG
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add CHANGELOG.md
+          git add docs/CHANGELOG.md
 
           git commit -m "chore: update changelog from release" || exit 0
 
           git push origin main
+```
