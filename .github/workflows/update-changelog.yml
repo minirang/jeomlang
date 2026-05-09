@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Update changelog
         shell: bash
@@ -25,11 +25,18 @@ jobs:
           mkdir -p docs
           touch docs/CHANGELOG.md
 
+          RELEASE_DATE=$(date -d "${{ github.event.release.published_at }}" +"%Y-%m-%d")
+
           {
-            echo "## ${{ github.event.release.tag_name }} - ${{ github.event.release.published_at }}"
+            echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
             echo ""
+
             printf '%s\n' "${{ github.event.release.body }}"
+
             echo ""
+            echo "---"
+            echo ""
+
             cat docs/CHANGELOG.md
           } > temp.md
 
@@ -43,8 +50,12 @@ jobs:
 
           git add docs/CHANGELOG.md
 
-          git diff --cached --quiet && exit 0
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
 
-          git commit -m "chore: update changelog"
+          git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
 
-          git push origin "HEAD:main"
+          git pull --rebase origin main
+          git push origin HEAD:main
