@@ -1,1346 +1,1476 @@
 <!doctype html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>점 (Jeom) — 점으로 프로그래밍하는 언어</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            :root {
-                --bg: #07090e;
-                --bg2: #0b0f18;
-                --surface: #111827;
-                --border: #1f2d3d;
-                --dot: #00e5ff;
-                --dot-dim: #0099cc44;
-                --accent: #ff6b35;
-                --green: #39ff14;
-                --text: #d4e4f0;
-                --text2: #6b8fa8;
-                --text3: #2d4a5e;
-                --mono: "DM Mono", monospace;
-                --sans: "Space Grotesk", "Noto Sans KR", sans-serif;
-                --glow: 0 0 30px #00e5ff22, 0 0 60px #00e5ff0a;
-                --glow-sm: 0 0 12px #00e5ff55;
-            }
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>점 (Jeom) — 점으로 프로그래밍하는 언어</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #07090e;
+            --bg2: #0b0f18;
+            --surface: #111827;
+            --border: #1f2d3d;
+            --dot: #00e5ff;
+            --dot-dim: #0099cc44;
+            --accent: #ff6b35;
+            --green: #39ff14;
+            --text: #d4e4f0;
+            --text2: #6b8fa8;
+            --text3: #2d4a5e;
+            --mono: "DM Mono", monospace;
+            --sans: "Space Grotesk", "Noto Sans KR", sans-serif;
+            --glow: 0 0 30px #00e5ff22, 0 0 60px #00e5ff0a;
+            --glow-sm: 0 0 12px #00e5ff55;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── 배경 도트 그리드 ── */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, #00e5ff0b 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 60px;
+            background: #07090ecc;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+        }
+
+        .nav-logo-text {
+            font-family: var(--mono);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dot);
+            letter-spacing: 3px;
+            text-shadow: var(--glow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--dot);
+        }
+
+        .nav-cta {
+            padding: 7px 18px;
+            background: transparent;
+            border: 1px solid var(--dot);
+            border-radius: 4px;
+            color: var(--dot) !important;
+            font-family: var(--mono);
+            font-size: 12px !important;
+            transition: all 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            background: #00e5ff14 !important;
+            box-shadow: var(--glow-sm);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            overflow: hidden;
+        }
+
+        /* 배경 빛 */
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, #00e5ff08 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text2);
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+            background: var(--surface);
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
             }
 
-            html {
-                scroll-behavior: smooth;
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .hero-logo {
+            width: 88px;
+            height: 88px;
+            border-radius: 22px;
+            margin-bottom: 28px;
+            box-shadow:
+                0 0 0 1px var(--border),
+                var(--glow);
+        }
+
+        .hero-title {
+            font-family: var(--mono);
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 500;
+            color: #fff;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .hero-title span {
+            color: var(--dot);
+            text-shadow: var(--glow);
+        }
+
+        .hero-subtitle {
+            font-family: var(--mono);
+            font-size: clamp(13px, 2vw, 16px);
+            color: var(--text2);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .hero-desc {
+            max-width: 560px;
+            font-size: 17px;
+            font-weight: 300;
+            color: var(--text2);
+            line-height: 1.8;
+            margin-bottom: 48px;
+        }
+
+        .hero-desc strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* 점 애니메이션 */
+        .dot-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 52px;
+        }
+
+        .dot-row span {
+            border-radius: 50%;
+            animation: dotFloat 3s ease-in-out infinite;
+        }
+
+        .dot-row span:nth-child(1) {
+            width: 10px;
+            height: 10px;
+            background: var(--dot);
+            animation-delay: 0s;
+        }
+
+        .dot-row span:nth-child(2) {
+            width: 6px;
+            height: 6px;
+            background: var(--text3);
+            animation-delay: 0.2s;
+        }
+
+        .dot-row span:nth-child(3) {
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            animation-delay: 0.4s;
+        }
+
+        .dot-row span:nth-child(4) {
+            width: 6px;
+            height: 6px;
+            background: var(--text3);
+            animation-delay: 0.6s;
+        }
+
+        .dot-row span:nth-child(5) {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            animation-delay: 0.8s;
+        }
+
+        .dot-row span:nth-child(6) {
+            width: 5px;
+            height: 5px;
+            background: var(--text3);
+            animation-delay: 1s;
+        }
+
+        .dot-row span:nth-child(7) {
+            width: 12px;
+            height: 12px;
+            background: var(--dot);
+            animation-delay: 1.2s;
+        }
+
+        @keyframes dotFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.6;
             }
 
-            body {
-                background: var(--bg);
-                color: var(--text);
-                font-family: var(--sans);
-                line-height: 1.6;
-                overflow-x: hidden;
+            50% {
+                transform: translateY(-8px);
+                opacity: 1;
+                box-shadow: 0 0 12px currentColor;
+            }
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00384d, #00263a);
+            border: 1px solid var(--dot);
+            border-radius: 6px;
+            color: var(--dot);
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            box-shadow: inset 0 1px 0 #00e5ff22;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #004d6a, #003350);
+            box-shadow:
+                var(--glow-sm),
+                inset 0 1px 0 #00e5ff22;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text2);
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text2);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        /* ── 코드 미리보기 ── */
+        .hero-code {
+            position: relative;
+            z-index: 1;
+            margin-top: 72px;
+            width: 100%;
+            max-width: 520px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow:
+                0 24px 80px #00000060,
+                0 0 0 1px #ffffff05;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 12px 16px;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        .code-dot:nth-child(1) {
+            background: #ff5f57;
+        }
+
+        .code-dot:nth-child(2) {
+            background: #febc2e;
+        }
+
+        .code-dot:nth-child(3) {
+            background: #28c840;
+        }
+
+        .code-filename {
+            margin-left: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: 1px;
+        }
+
+        .code-body {
+            padding: 20px 24px;
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 2;
+            text-align: left;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .c-comment {
+            color: var(--text3);
+        }
+
+        .c-kw {
+            color: var(--dot);
+        }
+
+        .c-str {
+            color: var(--accent);
+        }
+
+        .c-num {
+            color: var(--green);
+        }
+
+        .c-op {
+            color: #c792ea;
+        }
+
+        /* ── SECTION 공통 ── */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 24px;
+        }
+
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--dot);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 700;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text2);
+            max-width: 560px;
+            line-height: 1.8;
+        }
+
+        /* ── 특징 ── */
+        #features {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1px;
+            margin-top: 60px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--border);
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 32px;
+            transition: background 0.2s;
+        }
+
+        .feature-card:hover {
+            background: #131f2e;
+        }
+
+        .feature-icon {
+            font-family: var(--mono);
+            font-size: 28px;
+            margin-bottom: 16px;
+            display: block;
+            color: var(--dot);
+            text-shadow: var(--glow-sm);
+        }
+
+        .feature-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--text2);
+            line-height: 1.7;
+        }
+
+        /* ── 문자 표 ── */
+        #chars {}
+
+        .chars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+            margin-top: 48px;
+        }
+
+        .char-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.15s;
+        }
+
+        .char-card:hover {
+            border-color: var(--dot-dim);
+            background: #111827dd;
+        }
+
+        .char-sym {
+            font-family: var(--mono);
+            font-size: 22px;
+            color: var(--dot);
+            width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .char-info {
+            min-width: 0;
+        }
+
+        .char-unicode {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text3);
+            letter-spacing: 1px;
+        }
+
+        .char-name {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ── IDE 섹션 ── */
+        #ide {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ide-preview {
+            margin-top: 52px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow:
+                0 32px 80px #00000060,
+                var(--glow);
+        }
+
+        .ide-bar {
+            background: #0b1120;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ide-bar-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        .ide-bar-dot:nth-child(1) {
+            background: #ff5f57;
+        }
+
+        .ide-bar-dot:nth-child(2) {
+            background: #febc2e;
+        }
+
+        .ide-bar-dot:nth-child(3) {
+            background: #28c840;
+        }
+
+        .ide-title {
+            margin-left: 10px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: 2px;
+        }
+
+        .ide-badge {
+            margin-left: auto;
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--dot);
+            background: #00e5ff14;
+            border: 1px solid var(--dot-dim);
+            border-radius: 3px;
+            padding: 2px 8px;
+            letter-spacing: 1px;
+        }
+
+        .ide-body {
+            background: #0d1117;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            min-height: 240px;
+        }
+
+        .ide-col-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 12px;
+        }
+
+        .ide-code {
+            font-family: var(--mono);
+            font-size: 12.5px;
+            line-height: 1.85;
+            color: var(--text2);
+            white-space: pre;
+        }
+
+        .ide-output {
+            background: #07090e;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            line-height: 1.85;
+        }
+
+        .out-prompt {
+            color: var(--text3);
+        }
+
+        .out-val {
+            color: var(--green);
+        }
+
+        .ide-cta {
+            margin-top: 36px;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        /* ── 다운로드 ── */
+        #download {}
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 52px;
+        }
+
+        .dl-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 28px 24px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dl-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .dl-card.js::before {
+            background: linear-gradient(90deg, #f7df1e, #f0a500);
+        }
+
+        .dl-card.html::before {
+            background: linear-gradient(90deg, var(--dot), var(--accent));
+        }
+
+        .dl-card.py::before {
+            background: linear-gradient(90deg, #3776ab, #ffd343);
+        }
+
+        .dl-card:hover {
+            border-color: #2d4a5e;
+            transform: translateY(-2px);
+        }
+
+        .dl-card:hover::before {
+            opacity: 1;
+        }
+
+        .dl-icon {
+            font-family: var(--mono);
+            font-size: 24px;
+            margin-bottom: 14px;
+        }
+
+        .dl-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .dl-desc {
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .dl-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .dl-tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text3);
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 2px 8px;
+            letter-spacing: 1px;
+        }
+
+        .dl-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 12px;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .dl-btn:hover {
+            border-color: var(--dot);
+            color: var(--dot);
+            background: #00e5ff08;
+        }
+
+        /* ── 명령어 레퍼런스 ── */
+        #reference {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ref-tabs {
+            display: flex;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 48px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        .ref-tab {
+            padding: 10px 18px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            transition: all 0.15s;
+        }
+
+        .ref-tab:last-child {
+            border-right: none;
+        }
+
+        .ref-tab.active {
+            color: var(--dot);
+            background: #00e5ff08;
+        }
+
+        .ref-tab:hover:not(.active) {
+            color: var(--text2);
+        }
+
+        .ref-panels {
+            margin-top: 0;
+        }
+
+        .ref-panel {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .ref-panel.active {
+            display: block;
+        }
+
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--mono);
+        }
+
+        .ref-table th {
+            background: var(--bg2);
+            padding: 10px 20px;
+            text-align: left;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text3);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ref-table td {
+            padding: 10px 20px;
+            font-size: 13px;
+            border-bottom: 1px solid #1a2535;
+            vertical-align: middle;
+        }
+
+        .ref-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ref-table tr:hover td {
+            background: #111827;
+        }
+
+        .td-tok {
+            color: var(--dot);
+            font-size: 15px;
+            width: 80px;
+        }
+
+        .td-cmd {
+            color: var(--text2);
+            width: 120px;
+        }
+
+        .td-desc {
+            color: var(--text3);
+            font-size: 12px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--mono);
+            font-size: 20px;
+            color: var(--dot);
+            letter-spacing: 4px;
+            text-shadow: var(--glow-sm);
+            margin-bottom: 12px;
+        }
+
+        .footer-sub {
+            font-size: 13px;
+            color: var(--text3);
+            letter-spacing: 2px;
+            margin-bottom: 28px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .footer-links a {
+            color: var(--text3);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--dot);
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--text3);
+            letter-spacing: 1px;
+        }
+
+        .footer-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 28px;
+        }
+
+        .footer-dots span {
+            border-radius: 50%;
+            background: var(--text3);
+            animation: dotPulse 3s ease-in-out infinite;
+        }
+
+        .footer-dots span:nth-child(1) {
+            width: 5px;
+            height: 5px;
+            animation-delay: 0s;
+        }
+
+        .footer-dots span:nth-child(2) {
+            width: 3px;
+            height: 3px;
+            animation-delay: 0.3s;
+        }
+
+        .footer-dots span:nth-child(3) {
+            width: 7px;
+            height: 7px;
+            animation-delay: 0.6s;
+        }
+
+        .footer-dots span:nth-child(4) {
+            width: 3px;
+            height: 3px;
+            animation-delay: 0.9s;
+        }
+
+        .footer-dots span:nth-child(5) {
+            width: 5px;
+            height: 5px;
+            animation-delay: 1.2s;
+        }
+
+        .hero-code,
+        .ide-preview {
+            overflow: hidden;
+        }
+
+        .code-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            white-space: normal !important;
+            overflow: hidden !important;
+
+            line-height: 1.8;
+            word-break: break-all;
+        }
+
+        .code-body span {
+            display: block;
+            width: 100%;
+        }
+
+        .c-str {
+            line-break: anywhere;
+        }
+
+        .ide-code {
+            white-space: normal !important;
+            overflow: hidden !important;
+
+            word-break: break-all;
+            line-height: 1.9;
+        }
+
+        .ide-code span {
+            display: inline;
+        }
+
+        .ide-body {
+            overflow: hidden;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
             }
 
-            /* ── 배경 도트 그리드 ── */
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                background-image: radial-gradient(circle, #00e5ff0b 1px, transparent 1px);
-                background-size: 32px 32px;
-                pointer-events: none;
-                z-index: 0;
+            50% {
+                opacity: 1;
+                background: var(--dot);
+                box-shadow: 0 0 8px var(--dot);
             }
+        }
 
-            /* ── NAV ── */
+        /* ── 반응형 ── */
+        @media (max-width: 768px) {
             nav {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 100;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 48px;
-                height: 60px;
-                background: #07090ecc;
-                backdrop-filter: blur(12px);
-                border-bottom: 1px solid var(--border);
+                padding: 0 20px;
             }
-            .nav-logo {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                text-decoration: none;
-            }
-            .nav-logo img {
-                width: 28px;
-                height: 28px;
-                border-radius: 7px;
-            }
-            .nav-logo-text {
-                font-family: var(--mono);
-                font-size: 16px;
-                font-weight: 500;
-                color: var(--dot);
-                letter-spacing: 3px;
-                text-shadow: var(--glow-sm);
-            }
+
             .nav-links {
-                display: flex;
-                align-items: center;
-                gap: 32px;
-                list-style: none;
-            }
-            .nav-links a {
-                color: var(--text2);
-                text-decoration: none;
-                font-size: 13px;
-                letter-spacing: 1px;
-                transition: color 0.2s;
-            }
-            .nav-links a:hover {
-                color: var(--dot);
-            }
-            .nav-cta {
-                padding: 7px 18px;
-                background: transparent;
-                border: 1px solid var(--dot);
-                border-radius: 4px;
-                color: var(--dot) !important;
-                font-family: var(--mono);
-                font-size: 12px !important;
-                transition: all 0.2s !important;
-            }
-            .nav-cta:hover {
-                background: #00e5ff14 !important;
-                box-shadow: var(--glow-sm);
+                display: none;
             }
 
-            /* ── HERO ── */
-            .hero {
-                position: relative;
-                z-index: 1;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                padding: 120px 24px 80px;
-                overflow: hidden;
-            }
-
-            /* 배경 빛 */
-            .hero::after {
-                content: "";
-                position: absolute;
-                top: 20%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 600px;
-                height: 400px;
-                background: radial-gradient(ellipse, #00e5ff08 0%, transparent 70%);
-                pointer-events: none;
-            }
-
-            .hero-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 5px 14px;
-                border: 1px solid var(--border);
-                border-radius: 20px;
-                font-family: var(--mono);
-                font-size: 11px;
-                color: var(--text2);
-                letter-spacing: 2px;
-                margin-bottom: 32px;
-                background: var(--surface);
-            }
-            .hero-badge-dot {
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: var(--green);
-                box-shadow: 0 0 8px var(--green);
-                animation: pulse 2s ease-in-out infinite;
-            }
-            @keyframes pulse {
-                0%,
-                100% {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-                50% {
-                    opacity: 0.5;
-                    transform: scale(0.8);
-                }
-            }
-
-            .hero-logo {
-                width: 88px;
-                height: 88px;
-                border-radius: 22px;
-                margin-bottom: 28px;
-                box-shadow:
-                    0 0 0 1px var(--border),
-                    var(--glow);
+            .ide-body {
+                grid-template-columns: 1fr;
             }
 
             .hero-title {
-                font-family: var(--mono);
-                font-size: clamp(48px, 8vw, 96px);
-                font-weight: 500;
-                color: #fff;
-                letter-spacing: -2px;
-                line-height: 1;
-                margin-bottom: 8px;
+                letter-spacing: -1px;
             }
-            .hero-title span {
-                color: var(--dot);
-                text-shadow: var(--glow);
-            }
+        }
+    </style>
+</head>
 
-            .hero-subtitle {
-                font-family: var(--mono);
-                font-size: clamp(13px, 2vw, 16px);
-                color: var(--text2);
-                letter-spacing: 4px;
-                text-transform: uppercase;
-                margin-bottom: 28px;
-            }
+<body>
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <img src="img/logo.svg" alt="Jeom" />
+            <span class="nav-logo-text">JEOM</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">특징</a></li>
+            <li><a href="#chars">문자</a></li>
+            <li><a href="#ide">IDE</a></li>
+            <li><a href="#download">다운로드</a></li>
+            <li><a href="#reference">명령 참조</a></li>
+            <li><a href="/ide" class="nav-cta">● IDE 열기</a></li>
+        </ul>
+    </nav>
 
-            .hero-desc {
-                max-width: 560px;
-                font-size: 17px;
-                font-weight: 300;
-                color: var(--text2);
-                line-height: 1.8;
-                margin-bottom: 48px;
-            }
-            .hero-desc strong {
-                color: var(--text);
-                font-weight: 600;
-            }
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            v1.1.0 · Stack VM · 16 Dot Characters
+        </div>
 
-            /* 점 애니메이션 */
-            .dot-row {
-                display: flex;
-                gap: 12px;
-                justify-content: center;
-                margin-bottom: 52px;
-            }
-            .dot-row span {
-                border-radius: 50%;
-                animation: dotFloat 3s ease-in-out infinite;
-            }
-            .dot-row span:nth-child(1) {
-                width: 10px;
-                height: 10px;
-                background: var(--dot);
-                animation-delay: 0s;
-            }
-            .dot-row span:nth-child(2) {
-                width: 6px;
-                height: 6px;
-                background: var(--text3);
-                animation-delay: 0.2s;
-            }
-            .dot-row span:nth-child(3) {
-                width: 14px;
-                height: 14px;
-                background: var(--accent);
-                animation-delay: 0.4s;
-            }
-            .dot-row span:nth-child(4) {
-                width: 6px;
-                height: 6px;
-                background: var(--text3);
-                animation-delay: 0.6s;
-            }
-            .dot-row span:nth-child(5) {
-                width: 8px;
-                height: 8px;
-                background: var(--green);
-                animation-delay: 0.8s;
-            }
-            .dot-row span:nth-child(6) {
-                width: 5px;
-                height: 5px;
-                background: var(--text3);
-                animation-delay: 1s;
-            }
-            .dot-row span:nth-child(7) {
-                width: 12px;
-                height: 12px;
-                background: var(--dot);
-                animation-delay: 1.2s;
-            }
+        <img src="img/logo_animated.svg" alt="Jeom" class="hero-logo" />
 
-            @keyframes dotFloat {
-                0%,
-                100% {
-                    transform: translateY(0);
-                    opacity: 0.6;
-                }
-                50% {
-                    transform: translateY(-8px);
-                    opacity: 1;
-                    box-shadow: 0 0 12px currentColor;
-                }
-            }
+        <h1 class="hero-title">점<span>·</span>jeom</h1>
+        <p class="hero-subtitle">점으로 프로그래밍하는 난해 언어</p>
 
-            .hero-actions {
-                display: flex;
-                gap: 14px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .btn-primary {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 14px 32px;
-                background: linear-gradient(135deg, #00384d, #00263a);
-                border: 1px solid var(--dot);
-                border-radius: 6px;
-                color: var(--dot);
-                font-family: var(--mono);
-                font-size: 13px;
-                font-weight: 500;
-                text-decoration: none;
-                letter-spacing: 1px;
-                transition: all 0.2s;
-                box-shadow: inset 0 1px 0 #00e5ff22;
-            }
-            .btn-primary:hover {
-                background: linear-gradient(135deg, #004d6a, #003350);
-                box-shadow:
-                    var(--glow-sm),
-                    inset 0 1px 0 #00e5ff22;
-                transform: translateY(-1px);
-            }
-            .btn-secondary {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 14px 32px;
-                background: transparent;
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                color: var(--text2);
-                font-family: var(--mono);
-                font-size: 13px;
-                font-weight: 500;
-                text-decoration: none;
-                letter-spacing: 1px;
-                transition: all 0.2s;
-            }
-            .btn-secondary:hover {
-                border-color: var(--text2);
-                color: var(--text);
-                transform: translateY(-1px);
-            }
+        <p class="hero-desc">
+            유니코드 <strong>점 계열 문자 16종</strong>만으로 모든 코드를 작성합니다.<br />
+            브레인퍽처럼 난해하지만, <strong>함수·배열·딕셔너리·오류처리·파일시스템</strong>을 갖춘 완전한
+            언어입니다.
+        </p>
 
-            /* ── 코드 미리보기 ── */
-            .hero-code {
-                position: relative;
-                z-index: 1;
-                margin-top: 72px;
-                width: 100%;
-                max-width: 520px;
-                background: var(--surface);
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                overflow: hidden;
-                box-shadow:
-                    0 24px 80px #00000060,
-                    0 0 0 1px #ffffff05;
-            }
-            .code-header {
-                display: flex;
-                align-items: center;
-                gap: 7px;
-                padding: 12px 16px;
-                background: var(--bg2);
-                border-bottom: 1px solid var(--border);
-            }
-            .code-dot {
-                width: 11px;
-                height: 11px;
-                border-radius: 50%;
-            }
-            .code-dot:nth-child(1) {
-                background: #ff5f57;
-            }
-            .code-dot:nth-child(2) {
-                background: #febc2e;
-            }
-            .code-dot:nth-child(3) {
-                background: #28c840;
-            }
-            .code-filename {
-                margin-left: 8px;
-                font-family: var(--mono);
-                font-size: 11px;
-                color: var(--text3);
-                letter-spacing: 1px;
-            }
-            .code-body {
-                padding: 20px 24px;
-                font-family: var(--mono);
-                font-size: 13px;
-                line-height: 2;
-                text-align: left;
-                white-space: pre;
-                overflow-x: auto;
-            }
-            .c-comment {
-                color: var(--text3);
-            }
-            .c-kw {
-                color: var(--dot);
-            }
-            .c-str {
-                color: var(--accent);
-            }
-            .c-num {
-                color: var(--green);
-            }
-            .c-op {
-                color: #c792ea;
-            }
+        <div class="dot-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
 
-            /* ── SECTION 공통 ── */
-            section {
-                position: relative;
-                z-index: 1;
-                padding: 100px 24px;
-            }
-            .section-inner {
-                max-width: 1100px;
-                margin: 0 auto;
-            }
-            .section-label {
-                font-family: var(--mono);
-                font-size: 10px;
-                color: var(--dot);
-                letter-spacing: 4px;
-                text-transform: uppercase;
-                margin-bottom: 14px;
-            }
-            .section-title {
-                font-size: clamp(28px, 4vw, 44px);
-                font-weight: 700;
-                line-height: 1.15;
-                color: #fff;
-                margin-bottom: 16px;
-            }
-            .section-desc {
-                font-size: 16px;
-                font-weight: 300;
-                color: var(--text2);
-                max-width: 560px;
-                line-height: 1.8;
-            }
+        <div class="hero-actions">
+            <a href="/ide" class="btn-primary">● 웹 IDE 바로가기</a>
+            <a href="#download" class="btn-secondary">⸳ 다운로드</a>
+        </div>
 
-            /* ── 특징 ── */
-            #features {
-                background: var(--bg2);
-                border-top: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-            }
-
-            .features-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1px;
-                margin-top: 60px;
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                overflow: hidden;
-                background: var(--border);
-            }
-            .feature-card {
-                background: var(--surface);
-                padding: 32px;
-                transition: background 0.2s;
-            }
-            .feature-card:hover {
-                background: #131f2e;
-            }
-            .feature-icon {
-                font-family: var(--mono);
-                font-size: 28px;
-                margin-bottom: 16px;
-                display: block;
-                color: var(--dot);
-                text-shadow: var(--glow-sm);
-            }
-            .feature-title {
-                font-size: 17px;
-                font-weight: 600;
-                color: #fff;
-                margin-bottom: 8px;
-            }
-            .feature-desc {
-                font-size: 14px;
-                font-weight: 300;
-                color: var(--text2);
-                line-height: 1.7;
-            }
-
-            /* ── 문자 표 ── */
-            #chars {
-            }
-            .chars-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 8px;
-                margin-top: 48px;
-            }
-            .char-card {
-                background: var(--surface);
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                padding: 16px 18px;
-                display: flex;
-                align-items: center;
-                gap: 14px;
-                transition: all 0.15s;
-            }
-            .char-card:hover {
-                border-color: var(--dot-dim);
-                background: #111827dd;
-            }
-            .char-sym {
-                font-family: var(--mono);
-                font-size: 22px;
-                color: var(--dot);
-                width: 32px;
-                text-align: center;
-                flex-shrink: 0;
-            }
-            .char-info {
-                min-width: 0;
-            }
-            .char-unicode {
-                font-family: var(--mono);
-                font-size: 10px;
-                color: var(--text3);
-                letter-spacing: 1px;
-            }
-            .char-name {
-                font-size: 12px;
-                font-weight: 400;
-                color: var(--text2);
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            /* ── IDE 섹션 ── */
-            #ide {
-                background: var(--bg2);
-                border-top: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-            }
-
-            .ide-preview {
-                margin-top: 52px;
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow:
-                    0 32px 80px #00000060,
-                    var(--glow);
-            }
-            .ide-bar {
-                background: #0b1120;
-                border-bottom: 1px solid var(--border);
-                padding: 10px 16px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .ide-bar-dot {
-                width: 11px;
-                height: 11px;
-                border-radius: 50%;
-            }
-            .ide-bar-dot:nth-child(1) {
-                background: #ff5f57;
-            }
-            .ide-bar-dot:nth-child(2) {
-                background: #febc2e;
-            }
-            .ide-bar-dot:nth-child(3) {
-                background: #28c840;
-            }
-            .ide-title {
-                margin-left: 10px;
-                font-family: var(--mono);
-                font-size: 11px;
-                color: var(--text3);
-                letter-spacing: 2px;
-            }
-            .ide-badge {
-                margin-left: auto;
-                font-family: var(--mono);
-                font-size: 10px;
-                color: var(--dot);
-                background: #00e5ff14;
-                border: 1px solid var(--dot-dim);
-                border-radius: 3px;
-                padding: 2px 8px;
-                letter-spacing: 1px;
-            }
-            .ide-body {
-                background: #0d1117;
-                padding: 32px;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 24px;
-                min-height: 240px;
-            }
-            .ide-col-label {
-                font-family: var(--mono);
-                font-size: 9px;
-                letter-spacing: 3px;
-                text-transform: uppercase;
-                color: var(--text3);
-                margin-bottom: 12px;
-            }
-            .ide-code {
-                font-family: var(--mono);
-                font-size: 12.5px;
-                line-height: 1.85;
-                color: var(--text2);
-                white-space: pre;
-            }
-            .ide-output {
-                background: #07090e;
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                padding: 14px 16px;
-                font-family: var(--mono);
-                font-size: 12.5px;
-                line-height: 1.85;
-            }
-            .out-prompt {
-                color: var(--text3);
-            }
-            .out-val {
-                color: var(--green);
-            }
-
-            .ide-cta {
-                margin-top: 36px;
-                display: flex;
-                gap: 14px;
-                flex-wrap: wrap;
-            }
-
-            /* ── 다운로드 ── */
-            #download {
-            }
-
-            .download-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 16px;
-                margin-top: 52px;
-            }
-            .dl-card {
-                background: var(--surface);
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                padding: 28px 28px 24px;
-                transition: all 0.2s;
-                position: relative;
-                overflow: hidden;
-            }
-            .dl-card::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                opacity: 0;
-                transition: opacity 0.2s;
-            }
-            .dl-card.js::before {
-                background: linear-gradient(90deg, #f7df1e, #f0a500);
-            }
-            .dl-card.html::before {
-                background: linear-gradient(90deg, var(--dot), var(--accent));
-            }
-            .dl-card.py::before {
-                background: linear-gradient(90deg, #3776ab, #ffd343);
-            }
-            .dl-card:hover {
-                border-color: #2d4a5e;
-                transform: translateY(-2px);
-            }
-            .dl-card:hover::before {
-                opacity: 1;
-            }
-
-            .dl-icon {
-                font-family: var(--mono);
-                font-size: 24px;
-                margin-bottom: 14px;
-            }
-            .dl-title {
-                font-size: 18px;
-                font-weight: 600;
-                color: #fff;
-                margin-bottom: 6px;
-            }
-            .dl-desc {
-                font-size: 13px;
-                font-weight: 300;
-                color: var(--text2);
-                line-height: 1.7;
-                margin-bottom: 20px;
-            }
-            .dl-meta {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-                margin-bottom: 20px;
-            }
-            .dl-tag {
-                font-family: var(--mono);
-                font-size: 10px;
-                color: var(--text3);
-                background: var(--bg2);
-                border: 1px solid var(--border);
-                border-radius: 3px;
-                padding: 2px 8px;
-                letter-spacing: 1px;
-            }
-            .dl-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                padding: 9px 18px;
-                background: var(--bg2);
-                border: 1px solid var(--border);
-                border-radius: 5px;
-                color: var(--text);
-                font-family: var(--mono);
-                font-size: 12px;
-                text-decoration: none;
-                letter-spacing: 0.5px;
-                transition: all 0.15s;
-                cursor: pointer;
-            }
-            .dl-btn:hover {
-                border-color: var(--dot);
-                color: var(--dot);
-                background: #00e5ff08;
-            }
-
-            /* ── 명령어 레퍼런스 ── */
-            #reference {
-                background: var(--bg2);
-                border-top: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-            }
-
-            .ref-tabs {
-                display: flex;
-                gap: 0;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                overflow: hidden;
-                margin-top: 48px;
-                margin-bottom: 0;
-                flex-wrap: wrap;
-            }
-            .ref-tab {
-                padding: 10px 18px;
-                font-family: var(--mono);
-                font-size: 11px;
-                color: var(--text3);
-                letter-spacing: 1px;
-                cursor: pointer;
-                background: var(--surface);
-                border-right: 1px solid var(--border);
-                transition: all 0.15s;
-            }
-            .ref-tab:last-child {
-                border-right: none;
-            }
-            .ref-tab.active {
-                color: var(--dot);
-                background: #00e5ff08;
-            }
-            .ref-tab:hover:not(.active) {
-                color: var(--text2);
-            }
-
-            .ref-panels {
-                margin-top: 0;
-            }
-            .ref-panel {
-                display: none;
-                background: var(--surface);
-                border: 1px solid var(--border);
-                border-top: none;
-                border-radius: 0 0 8px 8px;
-                overflow: hidden;
-            }
-            .ref-panel.active {
-                display: block;
-            }
-
-            .ref-table {
-                width: 100%;
-                border-collapse: collapse;
-                font-family: var(--mono);
-            }
-            .ref-table th {
-                background: var(--bg2);
-                padding: 10px 20px;
-                text-align: left;
-                font-size: 9px;
-                letter-spacing: 3px;
-                color: var(--text3);
-                text-transform: uppercase;
-                border-bottom: 1px solid var(--border);
-            }
-            .ref-table td {
-                padding: 10px 20px;
-                font-size: 13px;
-                border-bottom: 1px solid #1a2535;
-                vertical-align: middle;
-            }
-            .ref-table tr:last-child td {
-                border-bottom: none;
-            }
-            .ref-table tr:hover td {
-                background: #111827;
-            }
-            .td-tok {
-                color: var(--dot);
-                font-size: 15px;
-                width: 80px;
-            }
-            .td-cmd {
-                color: var(--text2);
-                width: 120px;
-            }
-            .td-desc {
-                color: var(--text3);
-                font-size: 12px;
-            }
-
-            /* ── FOOTER ── */
-            footer {
-                position: relative;
-                z-index: 1;
-                border-top: 1px solid var(--border);
-                padding: 48px 24px;
-                text-align: center;
-            }
-            .footer-logo {
-                font-family: var(--mono);
-                font-size: 20px;
-                color: var(--dot);
-                letter-spacing: 4px;
-                text-shadow: var(--glow-sm);
-                margin-bottom: 12px;
-            }
-            .footer-sub {
-                font-size: 13px;
-                color: var(--text3);
-                letter-spacing: 2px;
-                margin-bottom: 28px;
-            }
-            .footer-links {
-                display: flex;
-                justify-content: center;
-                gap: 28px;
-                list-style: none;
-                margin-bottom: 32px;
-            }
-            .footer-links a {
-                color: var(--text3);
-                text-decoration: none;
-                font-family: var(--mono);
-                font-size: 11px;
-                letter-spacing: 1px;
-                transition: color 0.2s;
-            }
-            .footer-links a:hover {
-                color: var(--dot);
-            }
-            .footer-copy {
-                font-size: 12px;
-                color: var(--text3);
-                letter-spacing: 1px;
-            }
-            .footer-dots {
-                display: flex;
-                justify-content: center;
-                gap: 8px;
-                margin-top: 28px;
-            }
-            .footer-dots span {
-                border-radius: 50%;
-                background: var(--text3);
-                animation: dotPulse 3s ease-in-out infinite;
-            }
-            .footer-dots span:nth-child(1) {
-                width: 5px;
-                height: 5px;
-                animation-delay: 0s;
-            }
-            .footer-dots span:nth-child(2) {
-                width: 3px;
-                height: 3px;
-                animation-delay: 0.3s;
-            }
-            .footer-dots span:nth-child(3) {
-                width: 7px;
-                height: 7px;
-                animation-delay: 0.6s;
-            }
-            .footer-dots span:nth-child(4) {
-                width: 3px;
-                height: 3px;
-                animation-delay: 0.9s;
-            }
-            .footer-dots span:nth-child(5) {
-                width: 5px;
-                height: 5px;
-                animation-delay: 1.2s;
-            }
-
-            .hero-code {
-                overflow: hidden;
-            }
-
-            .code-body {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-
-                white-space: normal !important;
-                overflow: hidden !important;
-
-                line-height: 1.8;
-                word-break: break-all;
-            }
-
-            .code-body span {
-                display: block;
-                width: 100%;
-            }
-
-            .c-str {
-                line-break: anywhere;
-            }
-            @keyframes dotPulse {
-                0%,
-                100% {
-                    opacity: 0.3;
-                }
-                50% {
-                    opacity: 1;
-                    background: var(--dot);
-                    box-shadow: 0 0 8px var(--dot);
-                }
-            }
-
-            /* ── 반응형 ── */
-            @media (max-width: 768px) {
-                nav {
-                    padding: 0 20px;
-                }
-                .nav-links {
-                    display: none;
-                }
-                .ide-body {
-                    grid-template-columns: 1fr;
-                }
-                .hero-title {
-                    letter-spacing: -1px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <!-- NAV -->
-        <nav>
-            <a href="#" class="nav-logo">
-                <img src="img/logo.svg" alt="Jeom" />
-                <span class="nav-logo-text">JEOM</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#features">특징</a></li>
-                <li><a href="#chars">문자</a></li>
-                <li><a href="#ide">IDE</a></li>
-                <li><a href="#download">다운로드</a></li>
-                <li><a href="#reference">명령 참조</a></li>
-                <li><a href="/ide" class="nav-cta">● IDE 열기</a></li>
-            </ul>
-        </nav>
-
-        <!-- HERO -->
-        <section class="hero">
-            <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                v1.1.0 · Stack VM · 16 Dot Characters
+        <div class="hero-code">
+            <div class="code-header">
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <span class="code-filename">hello.jeom</span>
             </div>
+            <div class="code-body">
+                <span class="c-comment">◘ Hello, Jeom! — 점 언어로 Hello World</span>
+                <span class="c-kw">•·</span>
+                <span class="c-str">●.·......·‧.·.....·‧··..··.·‧··..··.·‧···..··●</span>
+                <span class="c-op">··</span>
+                <span class="c-kw">⋮⋮</span>
+            </div>
+        </div>
+    </section>
 
-            <img src="img/logo_animated.svg" alt="Jeom" class="hero-logo" />
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="section-inner">
+            <p class="section-label">why jeom</p>
+            <h2 class="section-title">난해하지만 강력하게</h2>
+            <p class="section-desc">점 16개로 시작해서, 실제로 동작하는 프로그램을 만들 수 있습니다.</p>
 
-            <h1 class="hero-title">점<span>·</span>jeom</h1>
-            <p class="hero-subtitle">점으로 프로그래밍하는 난해 언어</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">●</span>
+                    <h3 class="feature-title">점만 사용</h3>
+                    <p class="feature-desc">
+                        유니코드 점 계열 문자 16종만으로 코드를 작성합니다. 공백은 토큰 구분자로만 사용됩니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋮</span>
+                    <h3 class="feature-title">스택 기반 VM</h3>
+                    <p class="feature-desc">
+                        스택 기반 가상 머신 위에서 동작합니다. 모든 연산은 스택에서 팝/푸시로 처리됩니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">˙</span>
+                    <h3 class="feature-title">함수 & 재귀</h3>
+                    <p class="feature-desc">
+                        함수 정의, 호출, 재귀, 람다, 커링을 완전히 지원합니다. 클로저도 동작합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">◦</span>
+                    <h3 class="feature-title">배열 & 딕셔너리</h3>
+                    <p class="feature-desc">
+                        동적 배열과 해시맵을 지원합니다. map, filter, reduce 고차 함수도 사용 가능합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">‥·</span>
+                    <h3 class="feature-title">오류 처리</h3>
+                    <p class="feature-desc">
+                        TRY / CATCH / FINALLY 구문으로 예외를 처리합니다. THROW로 직접 예외를 발생시킬 수도
+                        있습니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋯</span>
+                    <h3 class="feature-title">모듈 & 파일시스템</h3>
+                    <p class="feature-desc">
+                        다른 .jeom 파일을 임포트할 수 있습니다. 파일 읽기/쓰기, 디렉터리 조작도 지원합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋮⋮</span>
+                    <h3 class="feature-title">JS + Python 엔진</h3>
+                    <p class="feature-desc">
+                        공용 JS 엔진(UMD)이 브라우저와 Node.js 양쪽에서 동작합니다. Python 엔진도 동일 스펙입니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">•</span>
+                    <h3 class="feature-title">웹 IDE 내장</h3>
+                    <p class="feature-desc">
+                        서버 없이 브라우저에서 바로 실행되는 웹 IDE가 포함됩니다. 인코더, 디코더, 명령 참조도
+                        내장됩니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <p class="hero-desc">
-                유니코드 <strong>점 계열 문자 16종</strong>만으로 모든 코드를 작성합니다.<br />
-                브레인퍽처럼 난해하지만, <strong>함수·배열·딕셔너리·오류처리·파일시스템</strong>을 갖춘 완전한
-                언어입니다.
+    <!-- CHARS -->
+    <section id="chars">
+        <div class="section-inner">
+            <p class="section-label">characters</p>
+            <h2 class="section-title">16개의 점 문자</h2>
+            <p class="section-desc">
+                이 문자들의 조합만으로 모든 프로그램을 작성합니다. 숫자는 이진수로, 문자열은 UTF-8 바이트로
+                인코딩됩니다.
             </p>
 
-            <div class="dot-row">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="hero-actions">
-                <a href="/ide" class="btn-primary">● 웹 IDE 바로가기</a>
-                <a href="#download" class="btn-secondary">⸳ 다운로드</a>
-            </div>
-
-            <div class="hero-code">
-                <div class="code-header">
-                    <div class="code-dot"></div>
-                    <div class="code-dot"></div>
-                    <div class="code-dot"></div>
-                    <span class="code-filename">hello.jeom</span>
-                </div>
-                <div class="code-body">
-                    <span class="c-comment">◘ Hello, Jeom! — 점 언어로 Hello World</span>
-                    <span class="c-kw">•·</span>
-                    <span class="c-str">●.·......·‧.·.....·‧··..··.·‧··..··.·‧···..··●</span>
-                    <span class="c-op">··</span>
-                    <span class="c-kw">⋮⋮</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- FEATURES -->
-        <section id="features">
-            <div class="section-inner">
-                <p class="section-label">why jeom</p>
-                <h2 class="section-title">난해하지만 강력하게</h2>
-                <p class="section-desc">점 16개로 시작해서, 실제로 동작하는 프로그램을 만들 수 있습니다.</p>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-icon">●</span>
-                        <h3 class="feature-title">점만 사용</h3>
-                        <p class="feature-desc">
-                            유니코드 점 계열 문자 16종만으로 코드를 작성합니다. 공백은 토큰 구분자로만 사용됩니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">⋮</span>
-                        <h3 class="feature-title">스택 기반 VM</h3>
-                        <p class="feature-desc">
-                            스택 기반 가상 머신 위에서 동작합니다. 모든 연산은 스택에서 팝/푸시로 처리됩니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">˙</span>
-                        <h3 class="feature-title">함수 & 재귀</h3>
-                        <p class="feature-desc">
-                            함수 정의, 호출, 재귀, 람다, 커링을 완전히 지원합니다. 클로저도 동작합니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">◦</span>
-                        <h3 class="feature-title">배열 & 딕셔너리</h3>
-                        <p class="feature-desc">
-                            동적 배열과 해시맵을 지원합니다. map, filter, reduce 고차 함수도 사용 가능합니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">‥·</span>
-                        <h3 class="feature-title">오류 처리</h3>
-                        <p class="feature-desc">
-                            TRY / CATCH / FINALLY 구문으로 예외를 처리합니다. THROW로 직접 예외를 발생시킬 수도
-                            있습니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">⋯</span>
-                        <h3 class="feature-title">모듈 & 파일시스템</h3>
-                        <p class="feature-desc">
-                            다른 .jeom 파일을 임포트할 수 있습니다. 파일 읽기/쓰기, 디렉터리 조작도 지원합니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">⋮⋮</span>
-                        <h3 class="feature-title">JS + Python 엔진</h3>
-                        <p class="feature-desc">
-                            공용 JS 엔진(UMD)이 브라우저와 Node.js 양쪽에서 동작합니다. Python 엔진도 동일 스펙입니다.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">•</span>
-                        <h3 class="feature-title">웹 IDE 내장</h3>
-                        <p class="feature-desc">
-                            서버 없이 브라우저에서 바로 실행되는 웹 IDE가 포함됩니다. 인코더, 디코더, 명령 참조도
-                            내장됩니다.
-                        </p>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <span class="char-sym">.</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+002E</div>
+                        <div class="char-name">FULL STOP · 0비트</div>
                     </div>
                 </div>
+                <div class="char-card">
+                    <span class="char-sym">·</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+00B7</div>
+                        <div class="char-name">MIDDLE DOT · 1비트</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">˙</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+02D9</div>
+                        <div class="char-name">DOT ABOVE · 함수</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">•</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2022</div>
+                        <div class="char-name">BULLET · 숫자 구분자</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">․</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2024</div>
+                        <div class="char-name">ONE DOT LEADER</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">‥</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2025</div>
+                        <div class="char-name">TWO DOT LEADER · 반복</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">…</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2026</div>
+                        <div class="char-name">HORIZONTAL ELLIPSIS · IF</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">‧</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2027</div>
+                        <div class="char-name">HYPHENATION POINT · 바이트 구분</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">∘</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2218</div>
+                        <div class="char-name">RING OPERATOR · 변수</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋅</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22C5</div>
+                        <div class="char-name">DOT OPERATOR · 산술</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">●</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25CF</div>
+                        <div class="char-name">BLACK CIRCLE · 문자열 구분자</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">◦</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25E6</div>
+                        <div class="char-name">WHITE BULLET · 배열</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⦁</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2981</div>
+                        <div class="char-name">Z NOTATION SPOT · 스택</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⸳</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2E33</div>
+                        <div class="char-name">RAISED DOT · 타입 변환</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋮</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22EE</div>
+                        <div class="char-name">VERTICAL ELLIPSIS · 블록</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋯</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22EF</div>
+                        <div class="char-name">MIDLINE ELLIPSIS · 파일·모듈</div>
+                    </div>
+                </div>
+                <div class="char-card" style="border-color: #2d4a5e44">
+                    <span class="char-sym" style="color: var(--text3)">◘</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25D8</div>
+                        <div class="char-name" style="color: var(--text3)">INVERSE BULLET · 주석</div>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- CHARS -->
-        <section id="chars">
-            <div class="section-inner">
-                <p class="section-label">characters</p>
-                <h2 class="section-title">16개의 점 문자</h2>
-                <p class="section-desc">
-                    이 문자들의 조합만으로 모든 프로그램을 작성합니다. 숫자는 이진수로, 문자열은 UTF-8 바이트로
-                    인코딩됩니다.
-                </p>
+    <!-- IDE -->
+    <section id="ide">
+        <div class="section-inner">
+            <p class="section-label">web ide</p>
+            <h2 class="section-title">브라우저에서 바로 실행</h2>
+            <p class="section-desc">
+                서버 없이 파일만 열면 됩니다. 인코더, 디코더, 명령 참조, 8가지 예제가 내장되어 있습니다.
+            </p>
 
-                <div class="chars-grid">
-                    <div class="char-card">
-                        <span class="char-sym">.</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+002E</div>
-                            <div class="char-name">FULL STOP · 0비트</div>
+            <div class="ide-preview">
+                <div class="ide-bar">
+                    <div class="ide-bar-dot"></div>
+                    <div class="ide-bar-dot"></div>
+                    <div class="ide-bar-dot"></div>
+                    <span class="ide-title">점(Jeom) 웹 IDE</span>
+                    <span class="ide-badge">WebVM v1.1.0</span>
+                </div>
+                <div class="ide-body">
+                    <div>
+                        <div class="ide-col-label">editor · main.jeom</div>
+                        <div class="ide-code">
+                            <span class="c-comment">◘ 팩토리얼 계산</span>
+                            <span class="c-kw">˙ ·∘·</span>
+                            <span class="c-kw">˙∘ ·</span>
+                            <span style="color: var(--border)">⋮</span>
+                            <span style="color: #6b8fa8">∘∘ · </span><span class="c-num">•·•</span>
+                            <span class="c-op">⋅‧∘∘</span>
+                            <span class="c-kw">…</span>
+                            <span style="color: var(--border)">⋮</span> <span class="c-num">•·•</span>
+                            <span class="c-kw">˙˙</span> <span style="color: var(--border)">⋮⋮</span>
+                            <span style="color: #6b8fa8">∘∘ · ∘∘ · </span><span class="c-num">•·•</span>
+                            <span class="c-op">⋅⋅</span>
+                            <span class="c-kw">˙˙˙ ·∘· ⋅⋅⋅ ˙˙</span>
+                            <span style="color: var(--border)">⋮⋮</span>
+
+                            <span class="c-kw">•·</span>
+                            <span class="c-num">•·.·•</span>
+                            <span class="c-kw">˙˙˙ ·∘·</span>
+                            <span class="c-op">··</span>
+                            <span class="c-kw">⋮⋮</span>
                         </div>
                     </div>
-                    <div class="char-card">
-                        <span class="char-sym">·</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+00B7</div>
-                            <div class="char-name">MIDDLE DOT · 1비트</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">˙</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+02D9</div>
-                            <div class="char-name">DOT ABOVE · 함수</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">•</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2022</div>
-                            <div class="char-name">BULLET · 숫자 구분자</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">․</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2024</div>
-                            <div class="char-name">ONE DOT LEADER</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">‥</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2025</div>
-                            <div class="char-name">TWO DOT LEADER · 반복</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">…</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2026</div>
-                            <div class="char-name">HORIZONTAL ELLIPSIS · IF</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">‧</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2027</div>
-                            <div class="char-name">HYPHENATION POINT · 바이트 구분</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">∘</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2218</div>
-                            <div class="char-name">RING OPERATOR · 변수</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">⋅</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+22C5</div>
-                            <div class="char-name">DOT OPERATOR · 산술</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">●</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+25CF</div>
-                            <div class="char-name">BLACK CIRCLE · 문자열 구분자</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">◦</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+25E6</div>
-                            <div class="char-name">WHITE BULLET · 배열</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">⦁</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2981</div>
-                            <div class="char-name">Z NOTATION SPOT · 스택</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">⸳</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+2E33</div>
-                            <div class="char-name">RAISED DOT · 타입 변환</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">⋮</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+22EE</div>
-                            <div class="char-name">VERTICAL ELLIPSIS · 블록</div>
-                        </div>
-                    </div>
-                    <div class="char-card">
-                        <span class="char-sym">⋯</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+22EF</div>
-                            <div class="char-name">MIDLINE ELLIPSIS · 파일·모듈</div>
-                        </div>
-                    </div>
-                    <div class="char-card" style="border-color: #2d4a5e44">
-                        <span class="char-sym" style="color: var(--text3)">◘</span>
-                        <div class="char-info">
-                            <div class="char-unicode">U+25D8</div>
-                            <div class="char-name" style="color: var(--text3)">INVERSE BULLET · 주석</div>
+                    <div>
+                        <div class="ide-col-label">output</div>
+                        <div class="ide-output">
+                            <div class="out-prompt">▶ 실행 시작</div>
+                            <div class="out-val">120</div>
+                            <div style="color: #39ff1488">◘ 정상 종료</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- IDE -->
-        <section id="ide">
-            <div class="section-inner">
-                <p class="section-label">web ide</p>
-                <h2 class="section-title">브라우저에서 바로 실행</h2>
-                <p class="section-desc">
-                    서버 없이 파일만 열면 됩니다. 인코더, 디코더, 명령 참조, 8가지 예제가 내장되어 있습니다.
-                </p>
-
-                <div class="ide-preview">
-                    <div class="ide-bar">
-                        <div class="ide-bar-dot"></div>
-                        <div class="ide-bar-dot"></div>
-                        <div class="ide-bar-dot"></div>
-                        <span class="ide-title">점(Jeom) 웹 IDE</span>
-                        <span class="ide-badge">WebVM v1.1.0</span>
-                    </div>
-                    <div class="ide-body">
-                        <div>
-                            <div class="ide-col-label">editor · main.jeom</div>
-                            <div class="ide-code">
-                                <span class="c-comment">◘ 팩토리얼 계산</span>
-                                <span class="c-kw">˙ ·∘·</span>
-                                <span class="c-kw">˙∘ ·</span>
-                                <span style="color: var(--border)">⋮</span>
-                                <span style="color: #6b8fa8">∘∘ · </span><span class="c-num">•·•</span>
-                                <span class="c-op">⋅‧∘∘</span>
-                                <span class="c-kw">…</span>
-                                <span style="color: var(--border)">⋮</span> <span class="c-num">•·•</span>
-                                <span class="c-kw">˙˙</span> <span style="color: var(--border)">⋮⋮</span>
-                                <span style="color: #6b8fa8">∘∘ · ∘∘ · </span><span class="c-num">•·•</span>
-                                <span class="c-op">⋅⋅</span>
-                                <span class="c-kw">˙˙˙ ·∘· ⋅⋅⋅ ˙˙</span>
-                                <span style="color: var(--border)">⋮⋮</span>
-
-                                <span class="c-kw">•·</span>
-                                <span class="c-num">•·.·•</span>
-                                <span class="c-kw">˙˙˙ ·∘·</span>
-                                <span class="c-op">··</span>
-                                <span class="c-kw">⋮⋮</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="ide-col-label">output</div>
-                            <div class="ide-output">
-                                <div class="out-prompt">▶ 실행 시작</div>
-                                <div class="out-val">120</div>
-                                <div style="color: #39ff1488">◘ 정상 종료</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ide-cta">
-                    <a href="/ide" class="btn-primary">● 웹 IDE 열기</a>
-                    <a href="#download" class="btn-secondary">⸳ 파일 다운로드</a>
-                </div>
+            <div class="ide-cta">
+                <a href="/ide" class="btn-primary">● 웹 IDE 열기</a>
+                <a href="#download" class="btn-secondary">⸳ 파일 다운로드</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- DOWNLOAD -->
-        <section id="download">
-            <div class="section-inner">
-                <p class="section-label">download</p>
-                <h2 class="section-title">파일 다운로드</h2>
-                <p class="section-desc">필요한 파일만 골라 사용하세요. 모든 파일은 무료입니다.</p>
+    <!-- DOWNLOAD -->
+    <section id="download">
+        <div class="section-inner">
+            <p class="section-label">download</p>
+            <h2 class="section-title">파일 다운로드</h2>
+            <p class="section-desc">필요한 파일만 골라 사용하세요. 모든 파일은 무료입니다.</p>
 
-                <div class="download-grid">
-                    <div class="dl-card html">
-                        <div class="dl-icon">● ⋮</div>
-                        <h3 class="dl-title">웹 IDE</h3>
-                        <p class="dl-desc">
-                            브라우저에서 바로 실행되는 IDE입니다. 에디터, 출력, 인코더, 명령 참조가 모두 포함됩니다.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">HTML</span>
-                            <span class="dl-tag">CSS</span>
-                            <span class="dl-tag">JS</span>
-                            <span class="dl-tag">서버 불필요</span>
-                        </div>
-                        <a href="/ide" class="dl-btn">● 바로 열기</a>
+            <div class="download-grid">
+                <div class="dl-card html">
+                    <div class="dl-icon">● ⋮</div>
+                    <h3 class="dl-title">웹 IDE</h3>
+                    <p class="dl-desc">
+                        브라우저에서 바로 실행되는 IDE입니다. 에디터, 출력, 인코더, 명령 참조가 모두 포함됩니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">HTML</span>
+                        <span class="dl-tag">CSS</span>
+                        <span class="dl-tag">JS</span>
+                        <span class="dl-tag">서버 불필요</span>
                     </div>
+                    <a href="/ide" class="dl-btn">● 바로 열기</a>
+                </div>
 
-                    <div class="dl-card js">
-                        <div class="dl-icon">⋯ ·</div>
-                        <h3 class="dl-title">Node.js CLI</h3>
-                        <p class="dl-desc">
-                            터미널에서 .jeom 파일을 실행합니다. REPL, 문법 검사, 인코딩 유틸이 포함됩니다.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">Node.js 18+</span>
-                            <span class="dl-tag">jeom_engine.js 필요</span>
-                        </div>
-                        <div
-                            style="
+                <div class="dl-card js">
+                    <div class="dl-icon">⋯ ·</div>
+                    <h3 class="dl-title">Node.js CLI</h3>
+                    <p class="dl-desc">
+                        터미널에서 .jeom 파일을 실행합니다. REPL, 문법 검사, 인코딩 유틸이 포함됩니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">Node.js 18+</span>
+                        <span class="dl-tag">jeom_engine.js 필요</span>
+                    </div>
+                    <div style="
                                 background: var(--bg2);
                                 border: 1px solid var(--border);
                                 border-radius: 5px;
@@ -1349,677 +1479,677 @@
                                 font-size: 12px;
                                 color: var(--text2);
                                 margin-bottom: 12px;
-                            "
-                        >
-                            node jeom_cli.js run hello.jeom
-                        </div>
-                        <a href="jeom_cli.js" download class="dl-btn">⸳ jeom_cli.js</a>
+                            ">
+                        node jeom_cli.js run hello.jeom
                     </div>
+                    <a href="jeom_cli.js" download class="dl-btn">⸳ jeom_cli.js</a>
+                </div>
 
-                    <div class="dl-card js">
-                        <div class="dl-icon">•· ⋮</div>
-                        <h3 class="dl-title">공용 엔진</h3>
-                        <p class="dl-desc">
-                            렉서·파서·VM이 통합된 UMD 엔진입니다. 브라우저와 Node.js 양쪽에서 동작합니다.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">UMD</span>
-                            <span class="dl-tag">v1.1.0</span>
-                            <span class="dl-tag">의존성 없음</span>
-                        </div>
-                        <a href="jeom_engine.js" download class="dl-btn">⸳ jeom_engine.js</a>
+                <div class="dl-card js">
+                    <div class="dl-icon">•· ⋮</div>
+                    <h3 class="dl-title">공용 엔진</h3>
+                    <p class="dl-desc">
+                        렉서·파서·VM이 통합된 UMD 엔진입니다. 브라우저와 Node.js 양쪽에서 동작합니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">UMD</span>
+                        <span class="dl-tag">v1.1.0</span>
+                        <span class="dl-tag">의존성 없음</span>
                     </div>
+                    <a href="jeom_engine.js" download class="dl-btn">⸳ jeom_engine.js</a>
+                </div>
 
-                    <div class="dl-card">
-                        <div class="dl-icon">∘∘ ◦</div>
-                        <h3 class="dl-title">표준 라이브러리</h3>
-                        <p class="dl-desc">
-                            sort, max, min, sum, reverse, contains, join 함수가 포함된 표준 라이브러리입니다.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">.jeom</span>
-                            <span class="dl-tag">7개 함수</span>
-                        </div>
-                        <a href="std.jeom" download class="dl-btn">⸳ std.jeom</a>
+                <div class="dl-card">
+                    <div class="dl-icon">∘∘ ◦</div>
+                    <h3 class="dl-title">표준 라이브러리</h3>
+                    <p class="dl-desc">
+                        sort, max, min, sum, reverse, contains, join 함수가 포함된 표준 라이브러리입니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">.jeom</span>
+                        <span class="dl-tag">7개 함수</span>
                     </div>
+                    <a href="std.jeom" download class="dl-btn">⸳ std.jeom</a>
+                </div>
 
-                    <div class="dl-card">
-                        <div class="dl-icon">˙ ·∘·</div>
-                        <h3 class="dl-title">예제 파일</h3>
-                        <p class="dl-desc">
-                            Hello World, FizzBuzz, 팩토리얼 예제 파일입니다. 언어 학습의 시작점으로 활용하세요.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">hello.jeom</span>
-                            <span class="dl-tag">fizzbuzz.jeom</span>
-                            <span class="dl-tag">factorial.jeom</span>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                            <a href="hello.jeom" download class="dl-btn">hello</a>
-                            <a href="fizzbuzz.jeom" download class="dl-btn">fizzbuzz</a>
-                            <a href="factorial.jeom" download class="dl-btn">factorial</a>
-                        </div>
+                <div class="dl-card">
+                    <div class="dl-icon">˙ ·∘·</div>
+                    <h3 class="dl-title">예제 파일</h3>
+                    <p class="dl-desc">
+                        Hello World, FizzBuzz, 팩토리얼 예제 파일입니다. 언어 학습의 시작점으로 활용하세요.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">hello.jeom</span>
+                        <span class="dl-tag">fizzbuzz.jeom</span>
+                        <span class="dl-tag">factorial.jeom</span>
                     </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                        <a href="hello.jeom" download class="dl-btn">hello</a>
+                        <a href="fizzbuzz.jeom" download class="dl-btn">fizzbuzz</a>
+                        <a href="factorial.jeom" download class="dl-btn">factorial</a>
+                    </div>
+                </div>
 
-                    <div class="dl-card">
-                        <div class="dl-icon">⋮· ⋮⋮</div>
-                        <h3 class="dl-title">명세서 & 문서</h3>
-                        <p class="dl-desc">
-                            언어 명세서(SPEC.md)와 README입니다. 토큰 테이블, 실행 모델, 문법 규칙이 정리되어 있습니다.
-                        </p>
-                        <div class="dl-meta">
-                            <span class="dl-tag">Markdown</span>
-                            <span class="dl-tag">v1.1.0</span>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                            <a href="README.md" download class="dl-btn">README.md</a>
-                            <a href="SPEC.md" download class="dl-btn">SPEC.md</a>
-                        </div>
+                <div class="dl-card">
+                    <div class="dl-icon">⋮· ⋮⋮</div>
+                    <h3 class="dl-title">명세서 & 문서</h3>
+                    <p class="dl-desc">
+                        언어 명세서(SPEC.md)와 README입니다. 토큰 테이블, 실행 모델, 문법 규칙이 정리되어 있습니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">Markdown</span>
+                        <span class="dl-tag">v1.1.0</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                        <a href="README.md" download class="dl-btn">README.md</a>
+                        <a href="SPEC.md" download class="dl-btn">SPEC.md</a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- REFERENCE -->
-        <section id="reference">
-            <div class="section-inner">
-                <p class="section-label">reference</p>
-                <h2 class="section-title">명령 토큰 참조</h2>
-                <p class="section-desc">모든 명령은 점 문자 시퀀스로 표현됩니다.</p>
+    <!-- REFERENCE -->
+    <section id="reference">
+        <div class="section-inner">
+            <p class="section-label">reference</p>
+            <h2 class="section-title">명령 토큰 참조</h2>
+            <p class="section-desc">모든 명령은 점 문자 시퀀스로 표현됩니다.</p>
 
-                <div class="ref-tabs">
-                    <div class="ref-tab active" onclick="showTab('io')">I/O</div>
-                    <div class="ref-tab" onclick="showTab('var')">변수·스택</div>
-                    <div class="ref-tab" onclick="showTab('arith')">산술·논리</div>
-                    <div class="ref-tab" onclick="showTab('flow')">흐름 제어</div>
-                    <div class="ref-tab" onclick="showTab('func')">함수</div>
-                    <div class="ref-tab" onclick="showTab('coll')">배열·딕셔너리</div>
-                    <div class="ref-tab" onclick="showTab('type')">타입·오류</div>
-                    <div class="ref-tab" onclick="showTab('sys')">시스템·파일</div>
+            <div class="ref-tabs">
+                <div class="ref-tab active" onclick="showTab('io')">I/O</div>
+                <div class="ref-tab" onclick="showTab('var')">변수·스택</div>
+                <div class="ref-tab" onclick="showTab('arith')">산술·논리</div>
+                <div class="ref-tab" onclick="showTab('flow')">흐름 제어</div>
+                <div class="ref-tab" onclick="showTab('func')">함수</div>
+                <div class="ref-tab" onclick="showTab('coll')">배열·딕셔너리</div>
+                <div class="ref-tab" onclick="showTab('type')">타입·오류</div>
+                <div class="ref-tab" onclick="showTab('sys')">시스템·파일</div>
+            </div>
+
+            <div class="ref-panels">
+                <div class="ref-panel active" id="tab-io">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·</td>
+                            <td class="td-cmd">PRINT</td>
+                            <td class="td-desc">stdout 출력 (줄바꿈 없음)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">··</td>
+                            <td class="td-cmd">PRINTLN</td>
+                            <td class="td-desc">stdout 출력 + 줄바꿈</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·˙</td>
+                            <td class="td-cmd">INPUT</td>
+                            <td class="td-desc">stdin → 스택 (문자열)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·˙˙</td>
+                            <td class="td-cmd">INPUTN</td>
+                            <td class="td-desc">stdin → 스택 (숫자)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·∘</td>
+                            <td class="td-cmd">ERR</td>
+                            <td class="td-desc">stderr 출력</td>
+                        </tr>
+                    </table>
                 </div>
-
-                <div class="ref-panels">
-                    <div class="ref-panel active" id="tab-io">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">·</td>
-                                <td class="td-cmd">PRINT</td>
-                                <td class="td-desc">stdout 출력 (줄바꿈 없음)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">··</td>
-                                <td class="td-cmd">PRINTLN</td>
-                                <td class="td-desc">stdout 출력 + 줄바꿈</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">·˙</td>
-                                <td class="td-cmd">INPUT</td>
-                                <td class="td-desc">stdin → 스택 (문자열)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">·˙˙</td>
-                                <td class="td-cmd">INPUTN</td>
-                                <td class="td-desc">stdin → 스택 (숫자)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">·∘</td>
-                                <td class="td-cmd">ERR</td>
-                                <td class="td-desc">stderr 출력</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-var">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">∘</td>
-                                <td class="td-cmd">VAR</td>
-                                <td class="td-desc">∘ &lt;이름&gt; &lt;값&gt; — 변수 선언+할당</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">∘∘</td>
-                                <td class="td-cmd">GET</td>
-                                <td class="td-desc">변수 읽기 → 스택 push</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">∘⋅</td>
-                                <td class="td-cmd">STORE ★</td>
-                                <td class="td-desc">스택 팝 → 변수 저장</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">∘∘∘</td>
-                                <td class="td-cmd">DEL</td>
-                                <td class="td-desc">변수 삭제</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⦁</td>
-                                <td class="td-cmd">PUSH</td>
-                                <td class="td-desc">값을 스택에 push</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⦁⦁</td>
-                                <td class="td-cmd">POP</td>
-                                <td class="td-desc">스택 팝 (버림)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⦁⦁⦁</td>
-                                <td class="td-cmd">SWAP</td>
-                                <td class="td-desc">상위 2개 교환</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⦁∘⦁</td>
-                                <td class="td-cmd">DUP</td>
-                                <td class="td-desc">최상단 복제</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⦁∘</td>
-                                <td class="td-cmd">PEEK</td>
-                                <td class="td-desc">최상단 복사 (팝 없이)</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-arith">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅</td>
-                                <td class="td-cmd">ADD</td>
-                                <td class="td-desc">a + b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⋅</td>
-                                <td class="td-cmd">SUB</td>
-                                <td class="td-desc">a - b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⋅⋅</td>
-                                <td class="td-cmd">MUL</td>
-                                <td class="td-desc">a × b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅∘</td>
-                                <td class="td-cmd">DIV</td>
-                                <td class="td-desc">a ÷ b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅∘∘</td>
-                                <td class="td-cmd">MOD</td>
-                                <td class="td-desc">a % b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅∘∘∘</td>
-                                <td class="td-cmd">POW</td>
-                                <td class="td-desc">a ^ b</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧</td>
-                                <td class="td-cmd">EQ</td>
-                                <td class="td-desc">a == b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧‧</td>
-                                <td class="td-cmd">NEQ</td>
-                                <td class="td-desc">a != b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧‧‧</td>
-                                <td class="td-cmd">LT</td>
-                                <td class="td-desc">a &lt; b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧∘</td>
-                                <td class="td-cmd">GT</td>
-                                <td class="td-desc">a &gt; b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧∘∘</td>
-                                <td class="td-cmd">LTE</td>
-                                <td class="td-desc">a &lt;= b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅‧∘∘∘</td>
-                                <td class="td-cmd">GTE</td>
-                                <td class="td-desc">a &gt;= b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⦁</td>
-                                <td class="td-cmd">AND</td>
-                                <td class="td-desc">a &amp;&amp; b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⦁⦁</td>
-                                <td class="td-cmd">OR</td>
-                                <td class="td-desc">a || b → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⦁⦁⦁</td>
-                                <td class="td-cmd">NOT</td>
-                                <td class="td-desc">!a → 1/0</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋅⦁∘</td>
-                                <td class="td-cmd">XOR</td>
-                                <td class="td-desc">a XOR b → 1/0</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-flow">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">…</td>
-                                <td class="td-cmd">IF</td>
-                                <td class="td-desc">truthy면 then 블록 실행</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">…·</td>
-                                <td class="td-cmd">ELSE</td>
-                                <td class="td-desc">IF 거짓 분기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">…‥</td>
-                                <td class="td-cmd">ELIF</td>
-                                <td class="td-desc">추가 조건 분기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥</td>
-                                <td class="td-cmd">LOOP</td>
-                                <td class="td-desc">n회 반복 (스택 팝)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥‥</td>
-                                <td class="td-cmd">WHILE</td>
-                                <td class="td-desc">조건+본문 반복</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥∘</td>
-                                <td class="td-cmd">BREAK</td>
-                                <td class="td-desc">반복 탈출</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥∘∘</td>
-                                <td class="td-cmd">CONT</td>
-                                <td class="td-desc">다음 반복으로</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮</td>
-                                <td class="td-cmd">BLOCK</td>
-                                <td class="td-desc">블록 시작</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮⋮</td>
-                                <td class="td-cmd">END</td>
-                                <td class="td-desc">블록 끝</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯</td>
-                                <td class="td-cmd">GOTO</td>
-                                <td class="td-desc">레이블로 점프</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯·</td>
-                                <td class="td-cmd">LABEL</td>
-                                <td class="td-desc">레이블 정의</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-func">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙</td>
-                                <td class="td-cmd">FUNC</td>
-                                <td class="td-desc">함수 정의 시작</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙∘</td>
-                                <td class="td-cmd">ARG</td>
-                                <td class="td-desc">인자 이름 선언</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙˙</td>
-                                <td class="td-cmd">RET</td>
-                                <td class="td-desc">반환 (스택 팝 → 반환값)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙˙˙</td>
-                                <td class="td-cmd">CALL</td>
-                                <td class="td-desc">함수 호출</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙⦁</td>
-                                <td class="td-cmd">LAMBDA</td>
-                                <td class="td-desc">익명 함수</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">˙⋅</td>
-                                <td class="td-cmd">CURRY</td>
-                                <td class="td-desc">첫 인자 부분 적용</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-coll">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦</td>
-                                <td class="td-cmd">ARR</td>
-                                <td class="td-desc">n개 팝 → 배열 생성</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦◦</td>
-                                <td class="td-cmd">IDX</td>
-                                <td class="td-desc">arr[idx]</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦◦◦</td>
-                                <td class="td-cmd">IDXS</td>
-                                <td class="td-desc">arr[idx] = val</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦∘</td>
-                                <td class="td-cmd">APP</td>
-                                <td class="td-desc">배열에 값 추가</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦∘∘</td>
-                                <td class="td-cmd">SLICE</td>
-                                <td class="td-desc">슬라이싱 [start:end]</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦⋅</td>
-                                <td class="td-cmd">MAP</td>
-                                <td class="td-desc">배열에 함수 적용</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦⋅⋅</td>
-                                <td class="td-cmd">FILTER</td>
-                                <td class="td-desc">배열 필터</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦⋅⋅⋅</td>
-                                <td class="td-cmd">REDUCE</td>
-                                <td class="td-desc">배열 리듀스</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦‧</td>
-                                <td class="td-cmd">DICT</td>
-                                <td class="td-desc">n쌍 → 딕셔너리 생성</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦‧‧</td>
-                                <td class="td-cmd">DGET</td>
-                                <td class="td-desc">dict[key]</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦‧‧‧</td>
-                                <td class="td-cmd">DSET</td>
-                                <td class="td-desc">dict[key] = val</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦⦁</td>
-                                <td class="td-cmd">KEYS</td>
-                                <td class="td-desc">키 목록</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">◦⦁⦁</td>
-                                <td class="td-cmd">VALS</td>
-                                <td class="td-desc">값 목록</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-type">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳</td>
-                                <td class="td-cmd">INT</td>
-                                <td class="td-desc">정수 변환</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳⸳</td>
-                                <td class="td-cmd">FLOAT</td>
-                                <td class="td-desc">실수 변환</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳⸳⸳</td>
-                                <td class="td-cmd">STR</td>
-                                <td class="td-desc">문자열 변환</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳∘</td>
-                                <td class="td-cmd">BOOL</td>
-                                <td class="td-desc">불리언 변환</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳⦁</td>
-                                <td class="td-cmd">TYPE</td>
-                                <td class="td-desc">타입 이름</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⸳‧</td>
-                                <td class="td-cmd">LEN</td>
-                                <td class="td-desc">길이</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥·</td>
-                                <td class="td-cmd">TRY</td>
-                                <td class="td-desc">예외 처리 시작</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥··</td>
-                                <td class="td-cmd">CATCH</td>
-                                <td class="td-desc">예외 처리 (에러 메시지 스택 push)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥·˙</td>
-                                <td class="td-cmd">FINALLY</td>
-                                <td class="td-desc">항상 실행</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥·∘</td>
-                                <td class="td-cmd">THROW</td>
-                                <td class="td-desc">예외 발생</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">‥·⦁</td>
-                                <td class="td-cmd">ASSERT</td>
-                                <td class="td-desc">조건 실패 시 예외</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="ref-panel" id="tab-sys">
-                        <table class="ref-table">
-                            <tr>
-                                <th>토큰</th>
-                                <th>명령</th>
-                                <th>설명</th>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯⋯</td>
-                                <td class="td-cmd">FOPEN</td>
-                                <td class="td-desc">파일 핸들 생성</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯⋯⋯</td>
-                                <td class="td-cmd">FREAD</td>
-                                <td class="td-desc">파일 읽기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯∘</td>
-                                <td class="td-cmd">FWRITE</td>
-                                <td class="td-desc">파일 쓰기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯∘∘</td>
-                                <td class="td-cmd">FCLOSE</td>
-                                <td class="td-desc">파일 닫기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯⦁</td>
-                                <td class="td-cmd">FEXIST</td>
-                                <td class="td-desc">파일 존재 여부 (1/0)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯⦁⦁</td>
-                                <td class="td-cmd">FDELETE</td>
-                                <td class="td-desc">파일 삭제</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯⋅</td>
-                                <td class="td-cmd">FLIST</td>
-                                <td class="td-desc">디렉터리 목록</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯‧</td>
-                                <td class="td-cmd">MKDIR</td>
-                                <td class="td-desc">디렉터리 생성</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯·⦁</td>
-                                <td class="td-cmd">IMPORT</td>
-                                <td class="td-desc">모듈 임포트</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋯·˙</td>
-                                <td class="td-cmd">EXPORT</td>
-                                <td class="td-desc">심볼 내보내기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮∘</td>
-                                <td class="td-cmd">EXIT</td>
-                                <td class="td-desc">프로그램 종료</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮⦁</td>
-                                <td class="td-cmd">DEBUG</td>
-                                <td class="td-desc">스택 전체 stderr 출력</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮‧</td>
-                                <td class="td-cmd">RAND</td>
-                                <td class="td-desc">0.0~1.0 난수</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮⋅</td>
-                                <td class="td-cmd">TIME</td>
-                                <td class="td-desc">유닉스 타임스탬프</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮‧‧</td>
-                                <td class="td-cmd">HASH</td>
-                                <td class="td-desc">djb2 해시</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮‧‧‧</td>
-                                <td class="td-cmd">REGEX</td>
-                                <td class="td-desc">정규식 매칭</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮·⦁</td>
-                                <td class="td-cmd">SLEEP</td>
-                                <td class="td-desc">대기 (밀리초)</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮·</td>
-                                <td class="td-cmd">EVAL</td>
-                                <td class="td-desc">문자열을 코드로 실행</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮··</td>
-                                <td class="td-cmd">EXEC</td>
-                                <td class="td-desc">시스템 명령 실행</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮·∘</td>
-                                <td class="td-cmd">ENV</td>
-                                <td class="td-desc">환경변수 읽기</td>
-                            </tr>
-                            <tr>
-                                <td class="td-tok">⋮∘∘</td>
-                                <td class="td-cmd">NOOP</td>
-                                <td class="td-desc">아무것도 안 함</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="ref-panel" id="tab-var">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘</td>
+                            <td class="td-cmd">VAR</td>
+                            <td class="td-desc">∘ &lt;이름&gt; &lt;값&gt; — 변수 선언+할당</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘∘</td>
+                            <td class="td-cmd">GET</td>
+                            <td class="td-desc">변수 읽기 → 스택 push</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘⋅</td>
+                            <td class="td-cmd">STORE ★</td>
+                            <td class="td-desc">스택 팝 → 변수 저장</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘∘∘</td>
+                            <td class="td-cmd">DEL</td>
+                            <td class="td-desc">변수 삭제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁</td>
+                            <td class="td-cmd">PUSH</td>
+                            <td class="td-desc">값을 스택에 push</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁⦁</td>
+                            <td class="td-cmd">POP</td>
+                            <td class="td-desc">스택 팝 (버림)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁⦁⦁</td>
+                            <td class="td-cmd">SWAP</td>
+                            <td class="td-desc">상위 2개 교환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁∘⦁</td>
+                            <td class="td-cmd">DUP</td>
+                            <td class="td-desc">최상단 복제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁∘</td>
+                            <td class="td-cmd">PEEK</td>
+                            <td class="td-desc">최상단 복사 (팝 없이)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-arith">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅</td>
+                            <td class="td-cmd">ADD</td>
+                            <td class="td-desc">a + b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⋅</td>
+                            <td class="td-cmd">SUB</td>
+                            <td class="td-desc">a - b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⋅⋅</td>
+                            <td class="td-cmd">MUL</td>
+                            <td class="td-desc">a × b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘</td>
+                            <td class="td-cmd">DIV</td>
+                            <td class="td-desc">a ÷ b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘∘</td>
+                            <td class="td-cmd">MOD</td>
+                            <td class="td-desc">a % b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘∘∘</td>
+                            <td class="td-cmd">POW</td>
+                            <td class="td-desc">a ^ b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧</td>
+                            <td class="td-cmd">EQ</td>
+                            <td class="td-desc">a == b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧‧</td>
+                            <td class="td-cmd">NEQ</td>
+                            <td class="td-desc">a != b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧‧‧</td>
+                            <td class="td-cmd">LT</td>
+                            <td class="td-desc">a &lt; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘</td>
+                            <td class="td-cmd">GT</td>
+                            <td class="td-desc">a &gt; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘∘</td>
+                            <td class="td-cmd">LTE</td>
+                            <td class="td-desc">a &lt;= b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘∘∘</td>
+                            <td class="td-cmd">GTE</td>
+                            <td class="td-desc">a &gt;= b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁</td>
+                            <td class="td-cmd">AND</td>
+                            <td class="td-desc">a &amp;&amp; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁⦁</td>
+                            <td class="td-cmd">OR</td>
+                            <td class="td-desc">a || b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁⦁⦁</td>
+                            <td class="td-cmd">NOT</td>
+                            <td class="td-desc">!a → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁∘</td>
+                            <td class="td-cmd">XOR</td>
+                            <td class="td-desc">a XOR b → 1/0</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-flow">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…</td>
+                            <td class="td-cmd">IF</td>
+                            <td class="td-desc">truthy면 then 블록 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…·</td>
+                            <td class="td-cmd">ELSE</td>
+                            <td class="td-desc">IF 거짓 분기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…‥</td>
+                            <td class="td-cmd">ELIF</td>
+                            <td class="td-desc">추가 조건 분기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥</td>
+                            <td class="td-cmd">LOOP</td>
+                            <td class="td-desc">n회 반복 (스택 팝)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥‥</td>
+                            <td class="td-cmd">WHILE</td>
+                            <td class="td-desc">조건+본문 반복</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥∘</td>
+                            <td class="td-cmd">BREAK</td>
+                            <td class="td-desc">반복 탈출</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥∘∘</td>
+                            <td class="td-cmd">CONT</td>
+                            <td class="td-desc">다음 반복으로</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮</td>
+                            <td class="td-cmd">BLOCK</td>
+                            <td class="td-desc">블록 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⋮</td>
+                            <td class="td-cmd">END</td>
+                            <td class="td-desc">블록 끝</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯</td>
+                            <td class="td-cmd">GOTO</td>
+                            <td class="td-desc">레이블로 점프</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·</td>
+                            <td class="td-cmd">LABEL</td>
+                            <td class="td-desc">레이블 정의</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-func">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙</td>
+                            <td class="td-cmd">FUNC</td>
+                            <td class="td-desc">함수 정의 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙∘</td>
+                            <td class="td-cmd">ARG</td>
+                            <td class="td-desc">인자 이름 선언</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙˙</td>
+                            <td class="td-cmd">RET</td>
+                            <td class="td-desc">반환 (스택 팝 → 반환값)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙˙˙</td>
+                            <td class="td-cmd">CALL</td>
+                            <td class="td-desc">함수 호출</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙⦁</td>
+                            <td class="td-cmd">LAMBDA</td>
+                            <td class="td-desc">익명 함수</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙⋅</td>
+                            <td class="td-cmd">CURRY</td>
+                            <td class="td-desc">첫 인자 부분 적용</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-coll">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦</td>
+                            <td class="td-cmd">ARR</td>
+                            <td class="td-desc">n개 팝 → 배열 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦◦</td>
+                            <td class="td-cmd">IDX</td>
+                            <td class="td-desc">arr[idx]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦◦◦</td>
+                            <td class="td-cmd">IDXS</td>
+                            <td class="td-desc">arr[idx] = val</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦∘</td>
+                            <td class="td-cmd">APP</td>
+                            <td class="td-desc">배열에 값 추가</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦∘∘</td>
+                            <td class="td-cmd">SLICE</td>
+                            <td class="td-desc">슬라이싱 [start:end]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅</td>
+                            <td class="td-cmd">MAP</td>
+                            <td class="td-desc">배열에 함수 적용</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅⋅</td>
+                            <td class="td-cmd">FILTER</td>
+                            <td class="td-desc">배열 필터</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅⋅⋅</td>
+                            <td class="td-cmd">REDUCE</td>
+                            <td class="td-desc">배열 리듀스</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧</td>
+                            <td class="td-cmd">DICT</td>
+                            <td class="td-desc">n쌍 → 딕셔너리 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧‧</td>
+                            <td class="td-cmd">DGET</td>
+                            <td class="td-desc">dict[key]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧‧‧</td>
+                            <td class="td-cmd">DSET</td>
+                            <td class="td-desc">dict[key] = val</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⦁</td>
+                            <td class="td-cmd">KEYS</td>
+                            <td class="td-desc">키 목록</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⦁⦁</td>
+                            <td class="td-cmd">VALS</td>
+                            <td class="td-desc">값 목록</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-type">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳</td>
+                            <td class="td-cmd">INT</td>
+                            <td class="td-desc">정수 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⸳</td>
+                            <td class="td-cmd">FLOAT</td>
+                            <td class="td-desc">실수 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⸳⸳</td>
+                            <td class="td-cmd">STR</td>
+                            <td class="td-desc">문자열 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳∘</td>
+                            <td class="td-cmd">BOOL</td>
+                            <td class="td-desc">불리언 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⦁</td>
+                            <td class="td-cmd">TYPE</td>
+                            <td class="td-desc">타입 이름</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳‧</td>
+                            <td class="td-cmd">LEN</td>
+                            <td class="td-desc">길이</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·</td>
+                            <td class="td-cmd">TRY</td>
+                            <td class="td-desc">예외 처리 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥··</td>
+                            <td class="td-cmd">CATCH</td>
+                            <td class="td-desc">예외 처리 (에러 메시지 스택 push)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·˙</td>
+                            <td class="td-cmd">FINALLY</td>
+                            <td class="td-desc">항상 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·∘</td>
+                            <td class="td-cmd">THROW</td>
+                            <td class="td-desc">예외 발생</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·⦁</td>
+                            <td class="td-cmd">ASSERT</td>
+                            <td class="td-desc">조건 실패 시 예외</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-sys">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋯</td>
+                            <td class="td-cmd">FOPEN</td>
+                            <td class="td-desc">파일 핸들 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋯⋯</td>
+                            <td class="td-cmd">FREAD</td>
+                            <td class="td-desc">파일 읽기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯∘</td>
+                            <td class="td-cmd">FWRITE</td>
+                            <td class="td-desc">파일 쓰기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯∘∘</td>
+                            <td class="td-cmd">FCLOSE</td>
+                            <td class="td-desc">파일 닫기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⦁</td>
+                            <td class="td-cmd">FEXIST</td>
+                            <td class="td-desc">파일 존재 여부 (1/0)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⦁⦁</td>
+                            <td class="td-cmd">FDELETE</td>
+                            <td class="td-desc">파일 삭제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋅</td>
+                            <td class="td-cmd">FLIST</td>
+                            <td class="td-desc">디렉터리 목록</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯‧</td>
+                            <td class="td-cmd">MKDIR</td>
+                            <td class="td-desc">디렉터리 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·⦁</td>
+                            <td class="td-cmd">IMPORT</td>
+                            <td class="td-desc">모듈 임포트</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·˙</td>
+                            <td class="td-cmd">EXPORT</td>
+                            <td class="td-desc">심볼 내보내기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮∘</td>
+                            <td class="td-cmd">EXIT</td>
+                            <td class="td-desc">프로그램 종료</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⦁</td>
+                            <td class="td-cmd">DEBUG</td>
+                            <td class="td-desc">스택 전체 stderr 출력</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧</td>
+                            <td class="td-cmd">RAND</td>
+                            <td class="td-desc">0.0~1.0 난수</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⋅</td>
+                            <td class="td-cmd">TIME</td>
+                            <td class="td-desc">유닉스 타임스탬프</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧‧</td>
+                            <td class="td-cmd">HASH</td>
+                            <td class="td-desc">djb2 해시</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧‧‧</td>
+                            <td class="td-cmd">REGEX</td>
+                            <td class="td-desc">정규식 매칭</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·⦁</td>
+                            <td class="td-cmd">SLEEP</td>
+                            <td class="td-desc">대기 (밀리초)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·</td>
+                            <td class="td-cmd">EVAL</td>
+                            <td class="td-desc">문자열을 코드로 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮··</td>
+                            <td class="td-cmd">EXEC</td>
+                            <td class="td-desc">시스템 명령 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·∘</td>
+                            <td class="td-cmd">ENV</td>
+                            <td class="td-desc">환경변수 읽기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮∘∘</td>
+                            <td class="td-cmd">NOOP</td>
+                            <td class="td-desc">아무것도 안 함</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- FOOTER -->
-        <footer>
-            <div class="footer-logo">점 · JEOM</div>
-            <div class="footer-sub">DOT LANGUAGE v1.1.0</div>
-            <ul class="footer-links">
-                <li><a href="/ide">웹 IDE</a></li>
-                <li><a href="README.md">README</a></li>
-                <li><a href="SPEC.md">명세서</a></li>
-                <li><a href="#download">다운로드</a></li>
-            </ul>
-            <div class="footer-copy">MIT License · 점(Jeom) Language Project</div>
-            <div class="footer-dots"><span></span><span></span><span></span><span></span><span></span></div>
-        </footer>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">점 · JEOM</div>
+        <div class="footer-sub">DOT LANGUAGE v1.1.0</div>
+        <ul class="footer-links">
+            <li><a href="/ide">웹 IDE</a></li>
+            <li><a href="README.md">README</a></li>
+            <li><a href="SPEC.md">명세서</a></li>
+            <li><a href="#download">다운로드</a></li>
+        </ul>
+        <div class="footer-copy">Apache License 2.0 · 점(Jeom) Language Project</div>
+        <div class="footer-dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </footer>
 
-        <script>
-            function showTab(name) {
-                document.querySelectorAll(".ref-tab").forEach(function (t) {
-                    t.classList.remove("active");
-                });
-                document.querySelectorAll(".ref-panel").forEach(function (p) {
-                    p.classList.remove("active");
-                });
-                var tabs = ["io", "var", "arith", "flow", "func", "coll", "type", "sys"];
-                var idx = tabs.indexOf(name);
-                if (idx >= 0) document.querySelectorAll(".ref-tab")[idx].classList.add("active");
-                var panel = document.getElementById("tab-" + name);
-                if (panel) panel.classList.add("active");
-            }
-
-            // 스크롤 시 nav 활성 링크
-            window.addEventListener("scroll", function () {
-                var sections = ["features", "chars", "ide", "download", "reference"];
-                var scrollY = window.scrollY + 80;
-                sections.forEach(function (id) {
-                    var el = document.getElementById(id);
-                    if (!el) return;
-                    var link = document.querySelector('a[href="#' + id + '"]');
-                    if (!link) return;
-                    if (el.offsetTop <= scrollY && el.offsetTop + el.offsetHeight > scrollY) {
-                        link.style.color = "var(--dot)";
-                    } else {
-                        link.style.color = "";
-                    }
-                });
+    <script>
+        function showTab(name) {
+            document.querySelectorAll(".ref-tab").forEach(function (t) {
+                t.classList.remove("active");
             });
-        </script>
-    </body>
+            document.querySelectorAll(".ref-panel").forEach(function (p) {
+                p.classList.remove("active");
+            });
+            var tabs = ["io", "var", "arith", "flow", "func", "coll", "type", "sys"];
+            var idx = tabs.indexOf(name);
+            if (idx >= 0) document.querySelectorAll(".ref-tab")[idx].classList.add("active");
+            var panel = document.getElementById("tab-" + name);
+            if (panel) panel.classList.add("active");
+        }
+
+        // 스크롤 시 nav 활성 링크
+        window.addEventListener("scroll", function () {
+            var sections = ["features", "chars", "ide", "download", "reference"];
+            var scrollY = window.scrollY + 80;
+            sections.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                var link = document.querySelector('a[href="#' + id + '"]');
+                if (!link) return;
+                if (el.offsetTop <= scrollY && el.offsetTop + el.offsetHeight > scrollY) {
+                    link.style.color = "var(--dot)";
+                } else {
+                    link.style.color = "";
+                }
+            });
+        });
+    </script>
+</body>
+
 </html>
