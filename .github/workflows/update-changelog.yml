@@ -1,0 +1,30 @@
+name: Update CHANGELOG on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Append release to CHANGELOG
+        run: |
+          echo "## ${{ github.event.release.tag_name }} - ${{ github.event.release.published_at }}" > temp.md
+          echo "" >> temp.md
+          echo "${{ github.event.release.body }}" >> temp.md
+          echo "" >> temp.md
+          cat CHANGELOG.md >> temp.md
+          mv temp.md CHANGELOG.md
+
+      - name: Commit CHANGELOG
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog from release" || exit 0
+          git push
