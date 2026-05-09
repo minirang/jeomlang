@@ -1,3 +1,7 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/ide/index.html" },
+    { "source": "/ide", "destination": "/ide/index.html" },
+  ]
 }
