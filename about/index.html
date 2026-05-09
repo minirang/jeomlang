@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>점 (Jeom) — 점으로 프로그래밍하는 언어</title>
+    <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="/about/style.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <img src="img/logo.svg" alt="Jeom" />
+            <span class="nav-logo-text">JEOM</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">특징</a></li>
+            <li><a href="#chars">문자</a></li>
+            <li><a href="#ide">IDE</a></li>
+            <li><a href="#download">다운로드</a></li>
+            <li><a href="#reference">명령 참조</a></li>
+            <li><a href="/ide" class="nav-cta">● IDE 열기</a></li>
+        </ul>
+    </nav>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            v1.1.0 · Stack VM · 16 Dot Characters
+        </div>
+        <img src="img/logo_animated.svg" alt="Jeom" class="hero-logo" />
+        <h1 class="hero-title">점<span>·</span>jeom</h1>
+        <p class="hero-subtitle">점으로 프로그래밍하는 난해 언어</p>
+        <p class="hero-desc">
+            유니코드 <strong>점 계열 문자 16종</strong>만으로 모든 코드를 작성합니다.<br />
+            브레인퍽처럼 난해하지만, <strong>함수·배열·딕셔너리·오류처리·파일시스템</strong>을 갖춘 완전한
+            언어입니다.
+        </p>
+        <div class="dot-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="hero-actions">
+            <a href="/ide" class="btn-primary">● 웹 IDE 바로가기</a>
+            <a href="#download" class="btn-secondary">⸳ 다운로드</a>
+        </div>
+        <div class="hero-code">
+            <div class="code-header">
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <span class="code-filename">hello.jeom</span>
+            </div>
+            <div class="code-body">
+                <span class="c-comment">◘ Hello, Jeom! — 점 언어로 Hello World</span>
+                <span class="c-kw">•·</span>
+                <span class="c-str">●.·......·‧.·.....·‧··..··.·‧··..··.·‧···..··●</span>
+                <span class="c-op">··</span>
+                <span class="c-kw">⋮⋮</span>
+            </div>
+        </div>
+    </section>
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="section-inner">
+            <p class="section-label">why jeom</p>
+            <h2 class="section-title">난해하지만 강력하게</h2>
+            <p class="section-desc">점 16개로 시작해서, 실제로 동작하는 프로그램을 만들 수 있습니다.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">●</span>
+                    <h3 class="feature-title">점만 사용</h3>
+                    <p class="feature-desc">
+                        유니코드 점 계열 문자 16종만으로 코드를 작성합니다. 공백은 토큰 구분자로만 사용됩니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋮</span>
+                    <h3 class="feature-title">스택 기반 VM</h3>
+                    <p class="feature-desc">
+                        스택 기반 가상 머신 위에서 동작합니다. 모든 연산은 스택에서 팝/푸시로 처리됩니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">˙</span>
+                    <h3 class="feature-title">함수 & 재귀</h3>
+                    <p class="feature-desc">
+                        함수 정의, 호출, 재귀, 람다, 커링을 완전히 지원합니다. 클로저도 동작합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">◦</span>
+                    <h3 class="feature-title">배열 & 딕셔너리</h3>
+                    <p class="feature-desc">
+                        동적 배열과 해시맵을 지원합니다. map, filter, reduce 고차 함수도 사용 가능합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">‥·</span>
+                    <h3 class="feature-title">오류 처리</h3>
+                    <p class="feature-desc">
+                        TRY / CATCH / FINALLY 구문으로 예외를 처리합니다. THROW로 직접 예외를 발생시킬 수도
+                        있습니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋯</span>
+                    <h3 class="feature-title">모듈 & 파일시스템</h3>
+                    <p class="feature-desc">
+                        다른 .jeom 파일을 임포트할 수 있습니다. 파일 읽기/쓰기, 디렉터리 조작도 지원합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⋮⋮</span>
+                    <h3 class="feature-title">JS 엔진</h3>
+                    <p class="feature-desc">
+                        공용 JS 엔진(UMD)이 브라우저와 Node.js 양쪽에서 동작합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">•</span>
+                    <h3 class="feature-title">웹 IDE 내장</h3>
+                    <p class="feature-desc">
+                        서버 없이 브라우저에서 바로 실행되는 웹 IDE가 포함됩니다. 인코더, 디코더, 명령 참조도
+                        내장됩니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- CHARS -->
+    <section id="chars">
+        <div class="section-inner">
+            <p class="section-label">characters</p>
+            <h2 class="section-title">16개의 점 문자</h2>
+            <p class="section-desc">
+                이 문자들의 조합만으로 모든 프로그램을 작성합니다. 숫자는 이진수로, 문자열은 UTF-8 바이트로
+                인코딩됩니다.
+            </p>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <span class="char-sym">.</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+002E</div>
+                        <div class="char-name">FULL STOP · 0비트</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">·</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+00B7</div>
+                        <div class="char-name">MIDDLE DOT · 1비트</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">˙</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+02D9</div>
+                        <div class="char-name">DOT ABOVE · 함수</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">•</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2022</div>
+                        <div class="char-name">BULLET · 숫자 구분자</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">․</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2024</div>
+                        <div class="char-name">ONE DOT LEADER</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">‥</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2025</div>
+                        <div class="char-name">TWO DOT LEADER · 반복</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">…</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2026</div>
+                        <div class="char-name">HORIZONTAL ELLIPSIS · IF</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">‧</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2027</div>
+                        <div class="char-name">HYPHENATION POINT · 바이트 구분</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">∘</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2218</div>
+                        <div class="char-name">RING OPERATOR · 변수</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋅</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22C5</div>
+                        <div class="char-name">DOT OPERATOR · 산술</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">●</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25CF</div>
+                        <div class="char-name">BLACK CIRCLE · 문자열 구분자</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">◦</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25E6</div>
+                        <div class="char-name">WHITE BULLET · 배열</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⦁</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2981</div>
+                        <div class="char-name">Z NOTATION SPOT · 스택</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⸳</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+2E33</div>
+                        <div class="char-name">RAISED DOT · 타입 변환</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋮</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22EE</div>
+                        <div class="char-name">VERTICAL ELLIPSIS · 블록</div>
+                    </div>
+                </div>
+                <div class="char-card">
+                    <span class="char-sym">⋯</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+22EF</div>
+                        <div class="char-name">MIDLINE ELLIPSIS · 파일·모듈</div>
+                    </div>
+                </div>
+                <div class="char-card" style="border-color: #2d4a5e44">
+                    <span class="char-sym" style="color: var(--text3)">◘</span>
+                    <div class="char-info">
+                        <div class="char-unicode">U+25D8</div>
+                        <div class="char-name" style="color: var(--text3)">INVERSE BULLET · 주석</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- IDE -->
+    <section id="ide">
+        <div class="section-inner">
+            <p class="section-label">web ide</p>
+            <h2 class="section-title">브라우저에서 바로 실행</h2>
+            <p class="section-desc">
+                서버 없이 파일만 열면 됩니다. 인코더, 디코더, 명령 참조, 8가지 예제가 내장되어 있습니다.
+            </p>
+            <div class="ide-preview">
+                <div class="ide-bar">
+                    <div class="ide-bar-dot"></div>
+                    <div class="ide-bar-dot"></div>
+                    <div class="ide-bar-dot"></div>
+                    <span class="ide-title">점(Jeom) 웹 IDE</span>
+                    <span class="ide-badge">WebVM v1.1.0</span>
+                </div>
+                <div class="ide-body">
+                    <div>
+                        <div class="ide-col-label">editor · main.jeom</div>
+                        <div class="ide-code">
+                            <span class="c-comment">◘ 팩토리얼 계산</span>
+                            <span class="c-kw">˙ ·∘·</span>
+                            <span class="c-kw">˙∘ ·</span>
+                            <span style="color: var(--border)">⋮</span>
+                            <span style="color: #6b8fa8">∘∘ · </span><span class="c-num">•·•</span>
+                            <span class="c-op">⋅‧∘∘</span>
+                            <span class="c-kw">…</span>
+                            <span style="color: var(--border)">⋮</span> <span class="c-num">•·•</span>
+                            <span class="c-kw">˙˙</span> <span style="color: var(--border)">⋮⋮</span>
+                            <span style="color: #6b8fa8">∘∘ · ∘∘ · </span><span class="c-num">•·•</span>
+                            <span class="c-op">⋅⋅</span>
+                            <span class="c-kw">˙˙˙ ·∘· ⋅⋅⋅ ˙˙</span>
+                            <span style="color: var(--border)">⋮⋮</span>
+                            <span class="c-kw">•·</span>
+                            <span class="c-num">•·.·•</span>
+                            <span class="c-kw">˙˙˙ ·∘·</span>
+                            <span class="c-op">··</span>
+                            <span class="c-kw">⋮⋮</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ide-col-label">output</div>
+                        <div class="ide-output">
+                            <div class="out-prompt">▶ 실행 시작</div>
+                            <div class="out-val">120</div>
+                            <div style="color: #39ff1488">◘ 정상 종료</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ide-cta">
+                <a href="/ide" class="btn-primary">● 웹 IDE 열기</a>
+                <a href="#download" class="btn-secondary">⸳ 파일 다운로드</a>
+            </div>
+        </div>
+    </section>
+    <!-- DOWNLOAD -->
+    <section id="download">
+        <div class="section-inner">
+            <p class="section-label">download</p>
+            <h2 class="section-title">파일 다운로드</h2>
+            <p class="section-desc">필요한 파일만 골라 사용하세요. 모든 파일은 무료입니다.</p>
+            <div class="download-grid">
+                <div class="dl-card html">
+                    <div class="dl-icon">● ⋮</div>
+                    <h3 class="dl-title">웹 IDE</h3>
+                    <p class="dl-desc">
+                        브라우저에서 바로 실행되는 IDE입니다. 에디터, 출력, 인코더, 명령 참조가 모두 포함됩니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">HTML</span>
+                        <span class="dl-tag">CSS</span>
+                        <span class="dl-tag">JS</span>
+                        <span class="dl-tag">서버 불필요</span>
+                    </div>
+                    <a href="/ide" class="dl-btn">● 바로 열기</a>
+                </div>
+                <div class="dl-card js">
+                    <div class="dl-icon">⋯ ·</div>
+                    <h3 class="dl-title">Node.js CLI</h3>
+                    <p class="dl-desc">
+                        터미널에서 .jeom 파일을 실행합니다. REPL, 문법 검사, 인코딩 유틸이 포함됩니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">Node.js 18+</span>
+                        <span class="dl-tag">jeom_engine.js 필요</span>
+                    </div>
+                    <div style="
+                                background: var(--bg2);
+                                border: 1px solid var(--border);
+                                border-radius: 5px;
+                                padding: 10px 14px;
+                                font-family: var(--mono);
+                                font-size: 12px;
+                                color: var(--text2);
+                                margin-bottom: 12px;
+                            ">
+                        node jeom_cli.js run hello.jeom
+                    </div>
+                    <a href="jeom_cli.js" download class="dl-btn">⸳ jeom_cli.js</a>
+                </div>
+                <div class="dl-card js">
+                    <div class="dl-icon">•· ⋮</div>
+                    <h3 class="dl-title">공용 엔진</h3>
+                    <p class="dl-desc">
+                        렉서·파서·VM이 통합된 UMD 엔진입니다. 브라우저와 Node.js 양쪽에서 동작합니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">UMD</span>
+                        <span class="dl-tag">v1.1.0</span>
+                        <span class="dl-tag">의존성 없음</span>
+                    </div>
+                    <a href="jeom_engine.js" download class="dl-btn">⸳ jeom_engine.js</a>
+                </div>
+                <div class="dl-card">
+                    <div class="dl-icon">∘∘ ◦</div>
+                    <h3 class="dl-title">표준 라이브러리</h3>
+                    <p class="dl-desc">
+                        sort, max, min, sum, reverse, contains, join 함수가 포함된 표준 라이브러리입니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">.jeom</span>
+                        <span class="dl-tag">7개 함수</span>
+                    </div>
+                    <a href="std.jeom" download class="dl-btn">⸳ std.jeom</a>
+                </div>
+                <div class="dl-card">
+                    <div class="dl-icon">˙ ·∘·</div>
+                    <h3 class="dl-title">예제 파일</h3>
+                    <p class="dl-desc">
+                        Hello World, FizzBuzz, 팩토리얼 예제 파일입니다. 언어 학습의 시작점으로 활용하세요.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">hello.jeom</span>
+                        <span class="dl-tag">fizzbuzz.jeom</span>
+                        <span class="dl-tag">factorial.jeom</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                        <a href="hello.jeom" download class="dl-btn">hello</a>
+                        <a href="fizzbuzz.jeom" download class="dl-btn">fizzbuzz</a>
+                        <a href="factorial.jeom" download class="dl-btn">factorial</a>
+                    </div>
+                </div>
+                <div class="dl-card">
+                    <div class="dl-icon">⋮· ⋮⋮</div>
+                    <h3 class="dl-title">명세서 & 문서</h3>
+                    <p class="dl-desc">
+                        언어 명세서(SPEC.md)와 README입니다. 토큰 테이블, 실행 모델, 문법 규칙이 정리되어 있습니다.
+                    </p>
+                    <div class="dl-meta">
+                        <span class="dl-tag">Markdown</span>
+                        <span class="dl-tag">v1.1.0</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                        <a href="https://github.com/minirang/jeomlang/blob/main/README.md" download class="dl-btn">README.md</a>
+                        <a href="https://github.com/minirang/jeomlang/blob/main/SPEC.md" download class="dl-btn">SPEC.md</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- REFERENCE -->
+    <section id="reference">
+        <div class="section-inner">
+            <p class="section-label">reference</p>
+            <h2 class="section-title">명령 토큰 참조</h2>
+            <p class="section-desc">모든 명령은 점 문자 시퀀스로 표현됩니다.</p>
+            <div class="ref-tabs">
+                <div class="ref-tab active" onclick="showTab('io')">I/O</div>
+                <div class="ref-tab" onclick="showTab('var')">변수·스택</div>
+                <div class="ref-tab" onclick="showTab('arith')">산술·논리</div>
+                <div class="ref-tab" onclick="showTab('flow')">흐름 제어</div>
+                <div class="ref-tab" onclick="showTab('func')">함수</div>
+                <div class="ref-tab" onclick="showTab('coll')">배열·딕셔너리</div>
+                <div class="ref-tab" onclick="showTab('type')">타입·오류</div>
+                <div class="ref-tab" onclick="showTab('sys')">시스템·파일</div>
+            </div>
+            <div class="ref-panels">
+                <div class="ref-panel active" id="tab-io">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·</td>
+                            <td class="td-cmd">PRINT</td>
+                            <td class="td-desc">stdout 출력 (줄바꿈 없음)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">··</td>
+                            <td class="td-cmd">PRINTLN</td>
+                            <td class="td-desc">stdout 출력 + 줄바꿈</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·˙</td>
+                            <td class="td-cmd">INPUT</td>
+                            <td class="td-desc">stdin → 스택 (문자열)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·˙˙</td>
+                            <td class="td-cmd">INPUTN</td>
+                            <td class="td-desc">stdin → 스택 (숫자)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">·∘</td>
+                            <td class="td-cmd">ERR</td>
+                            <td class="td-desc">stderr 출력</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-var">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘</td>
+                            <td class="td-cmd">VAR</td>
+                            <td class="td-desc">∘ &lt;이름&gt; &lt;값&gt; — 변수 선언+할당</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘∘</td>
+                            <td class="td-cmd">GET</td>
+                            <td class="td-desc">변수 읽기 → 스택 push</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘⋅</td>
+                            <td class="td-cmd">STORE ★</td>
+                            <td class="td-desc">스택 팝 → 변수 저장</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">∘∘∘</td>
+                            <td class="td-cmd">DEL</td>
+                            <td class="td-desc">변수 삭제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁</td>
+                            <td class="td-cmd">PUSH</td>
+                            <td class="td-desc">값을 스택에 push</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁⦁</td>
+                            <td class="td-cmd">POP</td>
+                            <td class="td-desc">스택 팝 (버림)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁⦁⦁</td>
+                            <td class="td-cmd">SWAP</td>
+                            <td class="td-desc">상위 2개 교환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁∘⦁</td>
+                            <td class="td-cmd">DUP</td>
+                            <td class="td-desc">최상단 복제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⦁∘</td>
+                            <td class="td-cmd">PEEK</td>
+                            <td class="td-desc">최상단 복사 (팝 없이)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-arith">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅</td>
+                            <td class="td-cmd">ADD</td>
+                            <td class="td-desc">a + b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⋅</td>
+                            <td class="td-cmd">SUB</td>
+                            <td class="td-desc">a - b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⋅⋅</td>
+                            <td class="td-cmd">MUL</td>
+                            <td class="td-desc">a × b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘</td>
+                            <td class="td-cmd">DIV</td>
+                            <td class="td-desc">a ÷ b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘∘</td>
+                            <td class="td-cmd">MOD</td>
+                            <td class="td-desc">a % b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅∘∘∘</td>
+                            <td class="td-cmd">POW</td>
+                            <td class="td-desc">a ^ b</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧</td>
+                            <td class="td-cmd">EQ</td>
+                            <td class="td-desc">a == b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧‧</td>
+                            <td class="td-cmd">NEQ</td>
+                            <td class="td-desc">a != b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧‧‧</td>
+                            <td class="td-cmd">LT</td>
+                            <td class="td-desc">a &lt; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘</td>
+                            <td class="td-cmd">GT</td>
+                            <td class="td-desc">a &gt; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘∘</td>
+                            <td class="td-cmd">LTE</td>
+                            <td class="td-desc">a &lt;= b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅‧∘∘∘</td>
+                            <td class="td-cmd">GTE</td>
+                            <td class="td-desc">a &gt;= b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁</td>
+                            <td class="td-cmd">AND</td>
+                            <td class="td-desc">a &amp;&amp; b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁⦁</td>
+                            <td class="td-cmd">OR</td>
+                            <td class="td-desc">a || b → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁⦁⦁</td>
+                            <td class="td-cmd">NOT</td>
+                            <td class="td-desc">!a → 1/0</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋅⦁∘</td>
+                            <td class="td-cmd">XOR</td>
+                            <td class="td-desc">a XOR b → 1/0</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-flow">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…</td>
+                            <td class="td-cmd">IF</td>
+                            <td class="td-desc">truthy면 then 블록 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…·</td>
+                            <td class="td-cmd">ELSE</td>
+                            <td class="td-desc">IF 거짓 분기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">…‥</td>
+                            <td class="td-cmd">ELIF</td>
+                            <td class="td-desc">추가 조건 분기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥</td>
+                            <td class="td-cmd">LOOP</td>
+                            <td class="td-desc">n회 반복 (스택 팝)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥‥</td>
+                            <td class="td-cmd">WHILE</td>
+                            <td class="td-desc">조건+본문 반복</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥∘</td>
+                            <td class="td-cmd">BREAK</td>
+                            <td class="td-desc">반복 탈출</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥∘∘</td>
+                            <td class="td-cmd">CONT</td>
+                            <td class="td-desc">다음 반복으로</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮</td>
+                            <td class="td-cmd">BLOCK</td>
+                            <td class="td-desc">블록 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⋮</td>
+                            <td class="td-cmd">END</td>
+                            <td class="td-desc">블록 끝</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯</td>
+                            <td class="td-cmd">GOTO</td>
+                            <td class="td-desc">레이블로 점프</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·</td>
+                            <td class="td-cmd">LABEL</td>
+                            <td class="td-desc">레이블 정의</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-func">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙</td>
+                            <td class="td-cmd">FUNC</td>
+                            <td class="td-desc">함수 정의 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙∘</td>
+                            <td class="td-cmd">ARG</td>
+                            <td class="td-desc">인자 이름 선언</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙˙</td>
+                            <td class="td-cmd">RET</td>
+                            <td class="td-desc">반환 (스택 팝 → 반환값)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙˙˙</td>
+                            <td class="td-cmd">CALL</td>
+                            <td class="td-desc">함수 호출</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙⦁</td>
+                            <td class="td-cmd">LAMBDA</td>
+                            <td class="td-desc">익명 함수</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">˙⋅</td>
+                            <td class="td-cmd">CURRY</td>
+                            <td class="td-desc">첫 인자 부분 적용</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-coll">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦</td>
+                            <td class="td-cmd">ARR</td>
+                            <td class="td-desc">n개 팝 → 배열 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦◦</td>
+                            <td class="td-cmd">IDX</td>
+                            <td class="td-desc">arr[idx]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦◦◦</td>
+                            <td class="td-cmd">IDXS</td>
+                            <td class="td-desc">arr[idx] = val</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦∘</td>
+                            <td class="td-cmd">APP</td>
+                            <td class="td-desc">배열에 값 추가</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦∘∘</td>
+                            <td class="td-cmd">SLICE</td>
+                            <td class="td-desc">슬라이싱 [start:end]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅</td>
+                            <td class="td-cmd">MAP</td>
+                            <td class="td-desc">배열에 함수 적용</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅⋅</td>
+                            <td class="td-cmd">FILTER</td>
+                            <td class="td-desc">배열 필터</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⋅⋅⋅</td>
+                            <td class="td-cmd">REDUCE</td>
+                            <td class="td-desc">배열 리듀스</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧</td>
+                            <td class="td-cmd">DICT</td>
+                            <td class="td-desc">n쌍 → 딕셔너리 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧‧</td>
+                            <td class="td-cmd">DGET</td>
+                            <td class="td-desc">dict[key]</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦‧‧‧</td>
+                            <td class="td-cmd">DSET</td>
+                            <td class="td-desc">dict[key] = val</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⦁</td>
+                            <td class="td-cmd">KEYS</td>
+                            <td class="td-desc">키 목록</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">◦⦁⦁</td>
+                            <td class="td-cmd">VALS</td>
+                            <td class="td-desc">값 목록</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-type">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳</td>
+                            <td class="td-cmd">INT</td>
+                            <td class="td-desc">정수 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⸳</td>
+                            <td class="td-cmd">FLOAT</td>
+                            <td class="td-desc">실수 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⸳⸳</td>
+                            <td class="td-cmd">STR</td>
+                            <td class="td-desc">문자열 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳∘</td>
+                            <td class="td-cmd">BOOL</td>
+                            <td class="td-desc">불리언 변환</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳⦁</td>
+                            <td class="td-cmd">TYPE</td>
+                            <td class="td-desc">타입 이름</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⸳‧</td>
+                            <td class="td-cmd">LEN</td>
+                            <td class="td-desc">길이</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·</td>
+                            <td class="td-cmd">TRY</td>
+                            <td class="td-desc">예외 처리 시작</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥··</td>
+                            <td class="td-cmd">CATCH</td>
+                            <td class="td-desc">예외 처리 (에러 메시지 스택 push)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·˙</td>
+                            <td class="td-cmd">FINALLY</td>
+                            <td class="td-desc">항상 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·∘</td>
+                            <td class="td-cmd">THROW</td>
+                            <td class="td-desc">예외 발생</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">‥·⦁</td>
+                            <td class="td-cmd">ASSERT</td>
+                            <td class="td-desc">조건 실패 시 예외</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ref-panel" id="tab-sys">
+                    <table class="ref-table">
+                        <tr>
+                            <th>토큰</th>
+                            <th>명령</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋯</td>
+                            <td class="td-cmd">FOPEN</td>
+                            <td class="td-desc">파일 핸들 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋯⋯</td>
+                            <td class="td-cmd">FREAD</td>
+                            <td class="td-desc">파일 읽기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯∘</td>
+                            <td class="td-cmd">FWRITE</td>
+                            <td class="td-desc">파일 쓰기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯∘∘</td>
+                            <td class="td-cmd">FCLOSE</td>
+                            <td class="td-desc">파일 닫기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⦁</td>
+                            <td class="td-cmd">FEXIST</td>
+                            <td class="td-desc">파일 존재 여부 (1/0)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⦁⦁</td>
+                            <td class="td-cmd">FDELETE</td>
+                            <td class="td-desc">파일 삭제</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯⋅</td>
+                            <td class="td-cmd">FLIST</td>
+                            <td class="td-desc">디렉터리 목록</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯‧</td>
+                            <td class="td-cmd">MKDIR</td>
+                            <td class="td-desc">디렉터리 생성</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·⦁</td>
+                            <td class="td-cmd">IMPORT</td>
+                            <td class="td-desc">모듈 임포트</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋯·˙</td>
+                            <td class="td-cmd">EXPORT</td>
+                            <td class="td-desc">심볼 내보내기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮∘</td>
+                            <td class="td-cmd">EXIT</td>
+                            <td class="td-desc">프로그램 종료</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⦁</td>
+                            <td class="td-cmd">DEBUG</td>
+                            <td class="td-desc">스택 전체 stderr 출력</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧</td>
+                            <td class="td-cmd">RAND</td>
+                            <td class="td-desc">0.0~1.0 난수</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮⋅</td>
+                            <td class="td-cmd">TIME</td>
+                            <td class="td-desc">유닉스 타임스탬프</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧‧</td>
+                            <td class="td-cmd">HASH</td>
+                            <td class="td-desc">djb2 해시</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮‧‧‧</td>
+                            <td class="td-cmd">REGEX</td>
+                            <td class="td-desc">정규식 매칭</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·⦁</td>
+                            <td class="td-cmd">SLEEP</td>
+                            <td class="td-desc">대기 (밀리초)</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·</td>
+                            <td class="td-cmd">EVAL</td>
+                            <td class="td-desc">문자열을 코드로 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮··</td>
+                            <td class="td-cmd">EXEC</td>
+                            <td class="td-desc">시스템 명령 실행</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮·∘</td>
+                            <td class="td-cmd">ENV</td>
+                            <td class="td-desc">환경변수 읽기</td>
+                        </tr>
+                        <tr>
+                            <td class="td-tok">⋮∘∘</td>
+                            <td class="td-cmd">NOOP</td>
+                            <td class="td-desc">아무것도 안 함</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">점 · JEOM</div>
+        <div class="footer-sub">DOT LANGUAGE v1.1.0</div>
+        <ul class="footer-links">
+            <li><a href="/ide">웹 IDE</a></li>
+            <li><a href="https://github.com/minirang/jeomlang/blob/main/README.md" download>README</a></li>
+            <li><a href="https://github.com/minirang/jeomlang/blob/main/SPEC.md" download>명세서</a></li>
+            <li><a href="#download">다운로드</a></li>
+        </ul>
+        <div class="footer-copy">Apache License 2.0 · 점(Jeom) Language Project</div>
+        <div class="footer-dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </footer>
+<script src="/about/script.js"></script>
+</body>
+</html>
