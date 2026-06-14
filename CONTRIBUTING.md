@@ -4,7 +4,7 @@
 
 ## 기여 방법
 
-1. 이 저장소를 Fork 합니다  
+1. 이 저장소를 포크(Fork) 합니다
 2. 새로운 브랜치를 생성합니다:
 
 ```bash
@@ -26,7 +26,7 @@ git commit -m "Add: 기능 설명"
 git push origin feature/your-feature
 ```
 
-7. Pull Request를 생성합니다  
+7. Pull Request를 생성합니다
 
 ## 규칙
 
