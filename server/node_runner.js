@@ -1,7 +1,11 @@
 // jeomlang npm 패키지를 Python에서 호출하기 위한 브릿지 스크립트
-// 실제 패키지 API에 맞게 함수명을 수정해주세요
 
-const jeomlang = require('jeomlang');
+let JeomEngine;
+try {
+    JeomEngine = require('../core/engine.js');
+} catch {
+    JeomEngine = require('jeomlang');
+}
 
 const mode = process.argv[2]; // 'run' 또는 'check'
 let code = '';
@@ -15,15 +19,27 @@ process.stdin.on('data', (chunk) => {
 process.stdin.on('end', () => {
     try {
         if (mode === 'run') {
-            // TODO: 실제 jeomlang API 함수명으로 교체
-            const output = jeomlang.run(code);
-            process.stdout.write(String(output ?? ''));
-            process.exit(0);
+            const { JeomVM } = JeomEngine;
+            const vm = new JeomVM({
+                stdout: (s) => process.stdout.write(s),
+                stderr: (s) => process.stderr.write(s),
+            });
+            vm.run(code)
+                .then(() => process.exit(0))
+                .catch((e) => {
+                    if (e && e.exitCode !== undefined) process.exit(e.exitCode);
+                    process.stderr.write(e.message || String(e));
+                    process.exit(1);
+                });
 
         } else if (mode === 'check') {
-            // TODO: 실제 jeomlang API 함수명으로 교체
-            // parse만 하고 실행은 안 함
-            jeomlang.parse(code);
+            const { tokenize, parse } = JeomEngine;
+            const tokens = tokenize(code);
+            const ast = parse(tokens);
+            if (!ast.find(n => n.type === 'MAIN')) {
+                process.stderr.write('main 블록(•·...⋮⋮)이 없습니다');
+                process.exit(1);
+            }
             process.exit(0);
 
         } else {
