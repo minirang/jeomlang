@@ -53,6 +53,7 @@ jeomlang/
 ├── stdlib/std.jeom        ← Standard library
 ├── examples/              ← Example files
 ├── docs/                  ← Documentation
+├── server/                ← 점랭 서버
 ├── shared/
 │   └── custom-elements.js ← Shared web component (<jeom-version>)
 └── tools/
