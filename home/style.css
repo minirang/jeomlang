@@ -16,6 +16,10 @@
     --glow-sm: 0 0 12px #00e5ff55;
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 *,
 *::before,
 *::after {
