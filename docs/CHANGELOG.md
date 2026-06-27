@@ -1,3 +1,13 @@
+## v1.7.6 - 2026-06-27
+
+## Updates
+
+- Added JeomLang web server for check grammar error, output.
+- Added server/README.md.
+To download JeomLang vscode extension, visit [this](https://github.com/minirang/jeomlang/releases/tag/v1.7.5)
+
+---
+
 ## v1.7.5 - 2026-06-07
 
 ## Updates
