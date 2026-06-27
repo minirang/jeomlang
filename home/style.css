@@ -38,18 +38,18 @@ body {
 
 /* ── 드레그 색 지정 ── */
 ::selection {
-    background-color: #3ec9c6;
-    color: #121212;
+    background-color: #3ec9c6 !important;
+    color: #121212 !important;
 }
 
 ::-webkit-selection {
-    background-color: #3ec9c6;
-    color: #121212;
+    background-color: #3ec9c6 !important;
+    color: #121212 !important;
 }
 
 ::-moz-selection {
-    background-color: #3ec9c6;
-    color: #121212;
+    background-color: #3ec9c6 !important;
+    color: #121212 !important;
 }
 
 /* ── 배경 도트 그리드 ── */
