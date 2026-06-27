@@ -16,10 +16,6 @@
     --glow-sm: 0 0 12px #00e5ff55;
 }
 
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
 *,
 *::before,
 *::after {
@@ -42,18 +38,18 @@ body {
 
 /* ── 드레그 색 지정 ── */
 ::selection {
-    background-color: #3ec9c6 !important;
-    color: #121212 !important;
+    background-color: #3ec9c6;
+    color: #121212;
 }
 
 ::-webkit-selection {
-    background-color: #3ec9c6 !important;
-    color: #121212 !important;
+    background-color: #3ec9c6;
+    color: #121212;
 }
 
 ::-moz-selection {
-    background-color: #3ec9c6 !important;
-    color: #121212 !important;
+    background-color: #3ec9c6;
+    color: #121212;
 }
 
 /* ── 배경 도트 그리드 ── */
