@@ -6,6 +6,18 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        'message': 'JeomLang API 서버에 오신 것을 환영합니다!',
+        'endpoints': {
+            'health': '/health',
+            'run': '/run (POST)',
+            'check': '/check (POST)'
+        }
+    })
+
+
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({'status': 'ok'})
