@@ -8,7 +8,7 @@ try {
 }
 
 const mode = process.argv[2]; // 'run' 또는 'check'
-let code = ``;
+let code = '';
 
 process.stdin.setEncoding('utf8');
 
