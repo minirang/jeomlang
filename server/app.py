@@ -3,6 +3,7 @@ from flask_cors import CORS
 from runner import run_code, check_code
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/health', methods=['GET'])
