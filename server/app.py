@@ -16,8 +16,8 @@ def run():
     if not data or 'code' not in data:
         return jsonify({'error': 'code 필드가 필요합니다'}), 400
 
-    code = data['code'].strip()
-    if not code:
+    code = data['code']
+    if not code.strip():
         return jsonify({'error': '코드가 비어있습니다'}), 400
 
     result = run_code(code)
@@ -32,8 +32,8 @@ def check():
     if not data or 'code' not in data:
         return jsonify({'error': 'code 필드가 필요합니다'}), 400
 
-    code = data['code'].strip()
-    if not code:
+    code = data['code']
+    if not code.strip():
         return jsonify({'error': '코드가 비어있습니다'}), 400
 
     result = check_code(code)
