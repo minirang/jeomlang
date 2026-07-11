@@ -12,7 +12,7 @@
   <a href="docs/CHANGELOG.md">변경 이력</a> · 
   <a href="https://www.npmjs.com/package/jeomlang">npm package</a> · 
   <a href="README_en.md">English README</a> · 
-  <a href="https://esolangs.org/wiki/Jeomlang/">esolang.org wiki</a>
+  <a href="https://esolangs.org/wiki/Jeomlang">esolang.org wiki</a>
 </p>
 
 <p align="center">
