@@ -2,7 +2,7 @@
 
 프로젝트에 기여해주셔서 감사합니다! ✨
 <br>
-Thanks for contributing this project! ✨
+Thank you for your contribution to this project! ✨
 
 | Name | GitHub | Contribution |
 |------|------|------|
