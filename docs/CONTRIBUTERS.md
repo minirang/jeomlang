@@ -1,6 +1,8 @@
 # Contributors
 
-프로젝트에 기여해주셔서 감사합니다 ✨
+프로젝트에 기여해주셔서 감사합니다! ✨
+<br>
+Thanks for contributing this project! ✨
 
 | Name | GitHub | Contribution |
 |------|------|------|
