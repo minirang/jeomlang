@@ -1,7 +1,7 @@
-# 점랭(JeomLang) 언어 명세서
+# 점랭(JeomLang) 언어 명세서 (한국어)
 
 > 작성자: minirang  
-> 최종 수정: 2026/5/29
+> 최종 수정: 2026/7/12
 
 -----
 
@@ -429,10 +429,10 @@ const {
 
 -----
 
-# JeomLang Language Specification
+# JeomLang Language Specification (English)
 
 > Author: minirang  
-> Last modified: 2026/5/29
+> Last modified: 2026/7/12
 
 -----
 
