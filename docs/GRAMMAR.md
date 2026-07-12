@@ -1,4 +1,4 @@
-# 점랭(JeomLang) 언어 문법 레퍼런스
+# 점랭(JeomLang) 언어 문법 레퍼런스 (한국어)
 
 > 점 유니코드 문자 16종만으로 작성하는 스택 기반 난해 언어
 
@@ -650,3 +650,659 @@ GOTO문  ::= '⋯' 이름
 -----
 
 *점랭(JeomLang) 언어 문법 레퍼런스*
+
+
+-----
+
+# JeomLang Language Syntax Reference (English)
+
+> A stack-based esoteric programming language written using only 16 Unicode dot characters
+
+-----
+
+## Character Set
+
+Only the 16 characters below have meaning in JeomLang.  
+Whitespace (spaces, tabs, newlines) is used only as a token separator and has no semantic meaning.  
+Any other character will cause a lexer error.
+
+|Symbol|Unicode |Name                       |Role                 |
+|:-:|:----:|---------------------------|---------------------|
+|`.`|U+002E|FULL STOP                  |0 bit                |
+|`·`|U+00B7|MIDDLE DOT                 |1 bit                |
+|`˙`|U+02D9|DOT ABOVE                  |Function-related commands|
+|`•`|U+2022|BULLET                     |Numeric literal separator|
+|`․`|U+2024|ONE DOT LEADER             |Command combination      |
+|`‥`|U+2025|TWO DOT LEADER             |Loop · Error · **Decimal separator**|
+|`…`|U+2026|HORIZONTAL ELLIPSIS        |Conditional branching    |
+|`‧`|U+2027|HYPHENATION POINT          |String byte separator    |
+|`∘`|U+2218|RING OPERATOR              |Variable commands        |
+|`⋅`|U+22C5|DOT OPERATOR               |Arithmetic · Logic commands|
+|`●`|U+25CF|BLACK CIRCLE               |String literal separator |
+|`◦`|U+25E6|WHITE BULLET               |Array · Dictionary commands|
+|`⦁`|U+2981|Z NOTATION SPOT            |Stack manipulation commands|
+|`⸳`|U+2E33|RAISED DOT                 |Type conversion commands |
+|`⋮`|U+22EE|VERTICAL ELLIPSIS          |Block                |
+|`⋯`|U+22EF|MIDLINE HORIZONTAL ELLIPSIS|File · Module commands   |
+|`◘`|U+25D8|INVERSE BULLET             |Comment (to end of line, not a token)|
+
+-----
+
+## Literals
+
+### Integer Literals
+
+```
+Integer ::= '•' BitString '•'
+BitString ::= (ZERO | ONE)+
+ZERO ::= '.'   (U+002E)
+ONE  ::= '·'   (U+00B7)
+```
+
+- The bit string is a big-endian binary number.
+- `••` = 0 (Empty bit string is 0)
+- `•·•` = 1
+- `•·.·•` = 5 (binary `101`)
+- `•·.·.•` = 10 (binary `1010`)
+
+### Float Literals (v1.1.0)
+
+```
+Float ::= '•' BitString '‥' BitString '•'
+```
+
+- `‥` (U+2025) separates the integer and fractional parts.
+- The integer part bit string is interpreted the same way as an integer literal.
+- The value of the i-th (0-indexed) bit in the fractional part is `bit × 2^-(i+1)`.
+- `•·‥·•` = 1.5 (Integer part `·`=1, fractional part `·`=0.5)
+- `•··‥.·•` = 3.25 (Integer part `··`=3, fractional part `.·`=0.25)
+- `•‥·•` = 0.5 (No integer part=0, fractional part `·`=0.5)
+- `•··‥.•` = 3.0 (Integer part `··`=3, fractional part `.`=0)
+
+### String Literals
+
+```
+String ::= '●' ByteString '●'
+ByteString ::= (Byte '‧')* Byte?
+Byte ::= (ZERO | ONE) × 8  (8 bits)
+```
+
+- Each byte is represented by exactly 8 bits of 0/1.
+- Byte boundaries are separated by `‧` (U+2027).
+- The encoding is UTF-8.
+- Whitespace (spaces, tabs, newlines) inside literals is ignored (for readability).
+
+```jeom
+◘ "Hi" encoding example
+◘ H = 0x48 = 01001000 → .·..····
+◘ i = 0x69 = 01101001 → .··.·..·
+●.·..·...‧.··.·..·●
+```
+
+### MAIN Marker
+
+```
+MAIN ::= '•·'  (Only when followed by whitespace or EOF or comment)
+```
+
+- If a bit character comes after `•·` instead of whitespace/EOF/comment, it is treated as a numeric literal.
+- Example: `•·.·.•` is the number 10, and `•·` (followed by space) is the MAIN marker.
+
+-----
+
+## Program Structure
+
+```
+Program ::= FunctionDef* MAINBlock
+MAINBlock ::= '•·' Statement* '⋮⋮'
+```
+
+- Function definitions are placed before the MAIN block.
+- Top-level function definitions are registered before MAIN execution (hoisting).
+- There is one MAIN block per program.
+
+-----
+
+## Blocks
+
+```
+Block ::= '⋮' Statement* '⋮⋮'
+```
+
+- Starts with `⋮` (U+22EE) and ends with `⋮⋮`.
+- Blocks can be nested.
+
+-----
+
+## Variables
+
+```
+VAR   ::= '∘' Name ValueExpr     ◘ Declare + Assign
+GET   ::= '∘∘' Name              ◘ Read → Push to stack
+STORE ::= '∘⋅' Name              ◘ Pop stack → Store
+DEL   ::= '∘∘∘' Name             ◘ Delete
+
+Name ::= OP Token  (Any combination of dot characters can be used as a name)
+ValueExpr ::= NumericLiteral | StringLiteral | GET | OPToken
+```
+
+Variable names can be any combination of dot characters. Even sequences identical to command tokens can be used as names (distinguished by context).
+
+```jeom
+◘ Example
+∘ · •·.·.•      ◘ Variable · = 10
+∘∘ ·             ◘ Read variable · → stack
+•·.·.•
+∘⋅ ·             ◘ Pop stack → store in variable ·
+∘∘∘ ·            ◘ Delete variable ·
+```
+
+-----
+
+## Stack Manipulation
+
+|Token    |Command|Action       |
+|-------|----|-------------|
+|`⦁ <value>`|PUSH|Push value to stack|
+|`⦁⦁`   |POP |Pop stack (discard)|
+|`⦁⦁⦁`  |SWAP|Swap top 2 items|
+|`⦁∘⦁`  |DUP |Duplicate top item|
+|`⦁∘`   |PEEK|Copy top item (without popping)|
+
+Stack operation order: `A B ⋅` → a=second pop, b=first pop, result = a + b
+
+-----
+
+## Arithmetic Operations
+
+All are binary (two operand) operations, ordered by b=first pop, a=second pop.
+
+|Token |Command|Result                           |
+|------|---|---------------------------------|
+|`⋅`   |ADD|a + b (Number addition, string concatenation, array merge)|
+|`⋅⋅`  |SUB|a - b                            |
+|`⋅⋅⋅` |MUL|a × b                            |
+|`⋅∘`  |DIV|a ÷ b (Runtime error if b=0)             |
+|`⋅∘∘` |MOD|a % b                            |
+|`⋅∘∘∘`|POW|a ^ b                            |
+
+-----
+
+## Comparison Operations
+
+Result is 1 (true) or 0 (false).
+
+|Token    |Command|Condition|
+|-------|---|------|
+|`⋅‧`   |EQ |a == b|
+|`⋅‧‧`  |NEQ|a != b|
+|`⋅‧‧‧` |LT |a < b |
+|`⋅‧∘`  |GT |a > b |
+|`⋅‧∘∘` |LTE|a <= b|
+|`⋅‧∘∘∘`|GTE|a >= b|
+
+-----
+
+## Logical Operations
+
+Result is 1 (true) or 0 (false).
+
+|Token |Command|Action |
+|------|---|-------|
+|`⋅⦁`  |AND|a && b |
+|`⋅⦁⦁` |OR |a || b |
+|`⋅⦁⦁⦁`|NOT|!a     |
+|`⋅⦁∘` |XOR|a XOR b|
+
+**Truthy Rules:** `0`, `null`, `undefined`, empty string `""`, empty array `[]` → falsy. The rest → truthy.
+
+-----
+
+## Conditional Branching
+
+### IF
+
+```
+IF Statement ::= '…' Block
+```
+
+Pops value from stack; if truthy, executes block.
+
+### IF-ELSE
+
+```
+IF-ELSE Statement ::= '…' Block '…·' Block
+```
+
+### IF-ELIF-ELSE
+
+```
+IF-ELIF Statement ::= '…' Block
+                      ('…‥' Block Block)*
+                      ('…·' Block)?
+```
+
+ELIF pattern: `…‥ ⋮<ConditionBlock>⋮⋮ ⋮<BodyBlock>⋮⋮`  
+Executes the condition block; if the popped stack value is truthy, executes the body block and skips subsequent branches.
+
+```jeom
+◘ ELIF example: If variable · is 1 "one", if 2 "two", else "other"
+∘∘ ·
+•·•
+⋅‧
+…
+⋮
+  ●.··.····‧.··.···.‧.··..·.·● ··
+⋮⋮
+…‥
+⋮
+  ∘∘ ·
+  •·.•
+  ⋅‧
+⋮⋮
+⋮
+  ●.···.·..‧.···.···‧.··.····● ··
+⋮⋮
+…·
+⋮
+  ●.··.····‧.···.·..‧.··.·...‧.··..·.·‧.···..·.● ··
+⋮⋮
+```
+
+-----
+
+## Loops
+
+### LOOP (Count iteration)
+
+```
+LOOP Statement ::= '‥' Block
+```
+
+Pops the count n from the stack and executes the block n times. Does not execute if n ≤ 0.
+
+```jeom
+•··•
+‥
+⋮
+  ●.····...● ·    ◘ Print "x" 3 times → xxx
+⋮⋮
+```
+
+### WHILE
+
+```
+WHILE Statement ::= '‥‥' Block Block
+                    ◘ WHILE '‥‥' ConditionBlock BodyBlock
+```
+
+Executes the condition block and repeats the body block as long as the popped stack value is truthy.
+
+```jeom
+◘ Print i=1 to less than 4
+∘ · •·•
+‥‥
+⋮
+  ∘∘ ·
+  •·..•
+  ⋅‧‧‧
+⋮⋮
+⋮
+  ∘∘ ·
+  ··
+  ∘∘ · •·• ⋅ ∘⋅ ·
+⋮⋮
+```
+
+### BREAK / CONTINUE
+
+|Token  |Command|Action                  |
+|-----|-----|------------------------|
+|`‥∘` |BREAK|Exit the current loop immediately      |
+|`‥∘∘`|CONT |Skip the rest of the current iteration and go to the next|
+
+-----
+
+## Functions
+
+### Function Definition
+
+```
+FunctionDef ::= '˙' Name ('˙∘' Name)* Block
+```
+
+```jeom
+˙ ·∘·∘       ◘ Function name: ·∘·∘
+˙∘ ·          ◘ First argument: ·
+˙∘ ··         ◘ Second argument: ··
+⋮
+  ∘∘ ·
+  ∘∘ ··
+  ⋅
+  ˙˙           ◘ Return
+⋮⋮
+```
+
+### Function Call
+
+```
+Call ::= '˙˙˙' Name
+```
+
+Arguments are pushed to the stack in declaration order before calling.
+
+```jeom
+•···•  •·.·•    ◘ Push 7, 5
+˙˙˙ ·∘·∘         ◘ Call → push 12 to stack
+```
+
+### RET (Return)
+
+```
+RET ::= '˙˙'
+```
+
+Pops the top value from the stack and passes it as the return value. The return value is pushed to the caller's stack.
+
+### LAMBDA (Anonymous Function)
+
+```
+LAMBDA ::= '˙⦁' ('˙∘' Name)* Block
+```
+
+```jeom
+˙⦁
+˙∘ ·
+⋮
+  ∘∘ ·
+  •·.•
+  ⋅⋅⋅
+  ˙˙
+⋮⋮
+∘⋅ ·∘    ◘ Store lambda in variable ·∘
+```
+
+### CURRY (Partial Application)
+
+```
+CURRY ::= '˙⋅'
+```
+
+Pops value (first argument) from stack → pops function → pushes a new function with the first argument fixed to the stack.
+
+```jeom
+∘∘ ·∘        ◘ push add function
+•·.·.•        ◘ 10
+˙⋅            ◘ add10 = add(10, ?)
+∘⋅ ··
+•·.·• ˙˙˙ ··  ◘ add10(5) = 15
+```
+
+-----
+
+## Arrays
+
+### Creation
+
+```
+ARR ::= '◦'
+```
+
+Pops n (count) from the stack, then pops n values above it to create an array and pushes it.
+
+```jeom
+•·• •·.• •··• •··•
+◦    ◘ [1, 2, 3]
+```
+
+### Indexing and Modification
+
+|Token  |Command|Action                                     |
+|-----|-----|---------------------------------------------|
+|`◦◦` |IDX  |Pop `idx, arr` → push `arr[idx]`               |
+|`◦◦◦`|IDXS |Pop `val, idx, arr` → `arr[idx]=val` → push arr|
+|`◦∘` |APP  |Pop `val, arr` → append val to arr → push arr  |
+|`◦∘∘`|SLICE|Pop `end, start, arr` → push `arr[start:end]`  |
+
+### Higher-order Functions
+
+|Token  |Command|Action                                   |
+|------|------|-----------------------------------------|
+|`◦⋅`  |MAP   |Pop `fn, arr` → apply fn to each element → push new array|
+|`◦⋅⋅` |FILTER|Pop `fn, arr` → only elements where fn is truthy → push new array|
+|`◦⋅⋅⋅`|REDUCE|Pop `init, fn, arr` → accumulate → push result |
+
+-----
+
+## Dictionaries
+
+### Creation
+
+```
+DICT ::= '◦‧'
+```
+
+Pops n (number of pairs) from the stack, then pops n×2 values above it in (key, value) order to create a dictionary and pushes it.
+
+```jeom
+●.··.···.‧.··....·‧.··.··.·‧.··..·.·●    ◘ "name"
+●.··.·.·.‧.··..·.·‧.··.····‧.··.··.·●    ◘ "jeom"
+●.···.··.‧.··..·.·‧.···..·.●             ◘ "ver"
+•·•                                        ◘ 1
+•·.•
+◦‧    ◘ {"name":"jeom","ver":1}
+```
+
+### Dictionary Manipulation
+
+|Token  |Command|Action                                          |
+|------|----|------------------------------------------------|
+|`◦‧‧` |DGET|Pop `key, dict` → push `dict[key]`                |
+|`◦‧‧‧`|DSET|Pop `val, key, dict` → `dict[key]=val` → push dict|
+|`◦⦁`  |KEYS|Pop `dict` → push key array                       |
+|`◦⦁⦁` |VALS|Pop `dict` → push value array                     |
+
+-----
+
+## Type Conversion
+
+|Token|Command|Action                                                     |
+|-----|-----|-----------------------------------------------------------|
+|`⸳`  |INT  |Top of stack → convert to integer (truncate fraction)      |
+|`⸳⸳` |FLOAT|→ convert to float                                         |
+|`⸳⸳⸳`|STR  |→ convert to string                                        |
+|`⸳∘` |BOOL |→ 1 or 0                                                   |
+|`⸳⦁` |TYPE |→ type name string (`"number"`, `"string"`, `"array"`, `"object"`)|
+|`⸳‧` |LEN  |→ string/array/dictionary length                           |
+|`⸳⋅` |CAST |Pop `type, val` → explicit type conversion                 |
+
+-----
+
+## Error Handling
+
+### TRY-CATCH-FINALLY
+
+```
+TRY Statement ::= '‥·' Block
+                  ('‥··' Block)?
+                  ('‥·˙' Block)?
+```
+
+- Upon entering the CATCH block, the error message is automatically pushed to the stack.
+- The FINALLY block is always executed regardless of success/exception.
+
+```jeom
+‥·
+⋮
+  •·• •• ⋅∘    ◘ 1÷0 → exception occurs
+⋮⋮
+‥··
+⋮
+  ∘⋅ ·          ◘ Store error message in variable ·
+  ●···.··..‧·..··...‧·.·..·..‧···.·.··‧·.·..·.·‧·..··...‧..···.·.‧..·.....●
+  ∘∘ ·
+  ⋅ ··           ◘ Print "Error: " + message
+⋮⋮
+‥·˙
+⋮
+  ●···.··..‧·..··..·‧·....·..‧···.·.··‧·.·...··‧·...··..● ··    ◘ Print "Done"
+⋮⋮
+```
+
+### THROW / ASSERT
+
+|Token  |Command|Action              |
+|-----|------|--------------------|
+|`‥·∘`|THROW |Pop stack → throw exception with message|
+|`‥·⦁`|ASSERT|Pop stack → throw exception if falsy|
+
+-----
+
+## I/O
+
+|Token|Command|Action                  |
+|-----|-------|------------------------|
+|`·`  |PRINT  |Pop stack → stdout (no newline)  |
+|`··` |PRINTLN|Pop stack → stdout + `\n`    |
+|`·∘` |ERR    |Pop stack → stderr + `\n`    |
+|`·˙` |INPUT  |Read line from stdin → push as string|
+|`·˙˙`|INPUTN |Read line from stdin → push as number |
+
+-----
+
+## File System
+
+|Token |Command|Action                      |
+|-----|-------|----------------------------|
+|`⋯⋯` |FOPEN  |Pop `mode, path` → push file handle |
+|`⋯⋯⋯`|FREAD  |Pop handle → push file content string     |
+|`⋯∘` |FWRITE |Pop `content, handle` → write to file|
+|`⋯∘∘`|FCLOSE |Pop handle (close)                  |
+|`⋯⦁` |FEXIST |Pop path → push 1 if exists, else 0 |
+|`⋯⦁⦁`|FDELETE|Pop path → delete file              |
+|`⋯⋅` |FLIST  |Pop path → push array of directory entries    |
+|`⋯‧` |MKDIR  |Pop path → create directory            |
+
+-----
+
+## Module System
+
+```
+IMPORT Statement ::= '⋯·⦁'
+```
+
+Pops the path (string) from the stack and loads the corresponding `.jeom` file.  
+Functions and variables of the loaded file are merged into the current environment.  
+Circular imports are prevented via caching.
+
+```jeom
+●.···..··‧.···.·..‧.··..·..‧.··.··..‧.··.·..·‧.··...·.‧..·.····‧.···..··‧.···.·..‧.··..·..‧..·.···.‧.··.·.·.‧.··..·.·‧.··.····‧.··.··.·●
+⋯·⦁
+```
+
+|Token|Command|Action               |
+|-----|------|-------------------|
+|`⋯·⦁`|IMPORT|Pop path → load and merge module|
+|`⋯·˙`|EXPORT|Export symbol      |
+
+-----
+
+## Flow Control (GOTO/LABEL)
+
+```
+LABEL Statement ::= '⋯·' Name
+GOTO Statement  ::= '⋯' Name
+```
+
+```jeom
+⋯ ·∘             ◘ Jump to label ·∘
+●···.·.·.‧·.··...·‧·.··.·..‧···.·.··‧·....·..‧·...·...‧···.·.··‧·..···..‧·.......● ··    ◘ Skipped (not executed)
+⋯· ·∘             ◘ Label definition
+●···.··..‧·..·.···‧·.·.··..‧···.·.·.‧·.···...‧·.··....‧···.··..‧·....·..‧·..···..‧..·.....‧···.··..‧·...·.··‧·.·..·..‧···.··.·‧·..·.··.‧·...·..·● ··    ◘ Executed here
+```
+
+-----
+
+## System Commands
+
+|Token |Command|Action                                          |
+|------|-----|-----------------------------------------------|
+|`⋮∘`  |EXIT |Pop stack (exit code) → exit program                      |
+|`⋮∘∘` |NOOP |Do nothing                                     |
+|`⋮⦁`  |DEBUG|Print entire stack to stderr                           |
+|`⋮⋅`  |TIME |Push current Unix timestamp (seconds)                           |
+|`⋮‧`  |RAND |Push random number between 0.0 and 1.0                          |
+|`⋮‧‧` |HASH |Pop string → push djb2 hash (hex string)                |
+|`⋮‧‧‧`|REGEX|Pop `pattern, text` → push first matched string (null if none)|
+|`⋮·⦁` |SLEEP|Pop milliseconds → wait                                     |
+|`⋮·`  |EVAL |Pop string → execute as Jeom code                               |
+|`⋮··` |EXEC |Pop system command string → push execution result                      |
+|`⋮·∘` |ENV  |Pop environment variable name → push value                             |
+
+-----
+
+## Comments
+
+```
+Comment ::= '◘' (All characters until end of line)
+```
+
+All content on the same line after `◘` (U+25D8) is ignored. It is not processed as a token.
+
+```jeom
+•·
+  ∘ · •·.·.•    ◘ a = 10 (this part is a comment)
+⋮⋮
+```
+
+-----
+
+## Execution Model Summary
+
+1. **Lexer**: Source → Token list (NUMBER, STRING, OP, EOF)
+1. **Parser**: Token → AST (FUNCDEF, MAIN, IF, WHILE, LOOP, TRY, CALL, etc.)
+1. **VM**: Stack-based interpreter executing AST sequentially
+- Registers top-level function definitions first (hoisting)
+- Executes MAIN block
+- All values are passed through the stack
+- Variables are stored in the environment (env) dictionary
+- Uses closure snapshots on function call
+
+-----
+
+## Complete Example
+
+```jeom
+◘ Factorial (Recursive) — 5! = 120
+˙ ·∘·
+˙∘ ·
+⋮
+  ∘∘ ·
+  •·•
+  ⋅‧∘∘
+  …
+  ⋮
+    •·•
+    ˙˙
+  ⋮⋮
+  ∘∘ ·
+  ∘∘ ·
+  •·•
+  ⋅⋅
+  ˙˙˙ ·∘·
+  ⋅⋅⋅
+  ˙˙
+⋮⋮
+
+•·
+  •·.·•
+  ˙˙˙ ·∘·
+  ··
+⋮⋮
+```
+
+Output: `120` (5!)
+
+-----
+
+*JeomLang Language Syntax Reference*
