@@ -96,7 +96,7 @@ jeom repl                     # Interactive REPL
 jeom encode "Hello"           # String → dot encoding
 jeom encode-num 42            # Integer → dot encoding
 jeom encode-float 3.14        # Float → dot encoding
-jeom decode "•·.·.•"          # Dot code → value
+jeom decode "•·.·.•"        # Dot code → value
 jeom tokens <file.jeom>       # Token list
 jeom ast <file.jeom>          # Print AST
 jeom ops                      # All command tokens
