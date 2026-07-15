@@ -7,6 +7,7 @@
 <p align="center">
   <a href="https://jeomlang.vercel.app/">Homepage</a> ·
   <a href="https://jeomlang.vercel.app/ide">Web IDE</a> ·
+  <a href="https://jeomlang.onrender.com">JeomLang 서버</a> ·
   <a href="docs/GRAMMAR.md">Grammar Reference</a> ·
   <a href="docs/SPEC.md">Language Specification</a> ·
   <a href="docs/CHANGELOG.md">Changelog</a> · 
@@ -54,7 +55,7 @@ jeomlang/
 ├── stdlib/std.jeom        ← Standard library
 ├── examples/              ← Example files
 ├── docs/                  ← Documentation
-├── server/                ← 점랭 서버
+├── server/                ← JeomLang server
 ├── shared/
 │   └── custom-elements.js ← Shared web component (<jeom-version>)
 └── tools/
