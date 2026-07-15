@@ -7,6 +7,7 @@
 <p align="center">
   <a href="https://jeomlang.vercel.app/">홈페이지</a> ·
   <a href="https://jeomlang.vercel.app/ide">웹 IDE</a> ·
+  <a href="https://jeomlang.onrender.com">JeomLang 서버</a> ·
   <a href="docs/GRAMMAR.md">문법 레퍼런스</a> ·
   <a href="docs/SPEC.md">언어 명세</a> ·
   <a href="docs/CHANGELOG.md">변경 이력</a> · 
