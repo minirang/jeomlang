@@ -30,7 +30,7 @@ DIRS=(
   "syntaxes"
 )
 
-EXTERNAL_ICON="$REPO_ROOT/../assets/img/icon.png"
+EXTERNAL_ICON="$REPO_ROOT/../../assets/img/icon.png"
 
 echo "Installing JEOM VS Code Runner v$VERSION"
 echo "Extension ID: $EXTENSION_ID"

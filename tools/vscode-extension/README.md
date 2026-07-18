@@ -1,4 +1,4 @@
-# <img src="../assets/img/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner
+# <img src="../../assets/img/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner
 
 <p>
   <a href="README.md">📖 <strong>README</strong></a>
@@ -136,15 +136,9 @@ npm run update-jeom
 - `COMPATIBILITY.md`: 공식 CLI/엔진 호환 방식 설명
 - `syntaxes/jeom.tmLanguage.json`: 기본 TextMate 문법 하이라이트 정의
 - `language-configuration.json`: 주석, 괄호, 자동 닫기 설정
-- `../assets/img/icon.png`: JEOM 파일 아이콘 (외부 자산)
+- `../../assets/img/icon.png`: JEOM 파일 아이콘 (리포 루트 자산)
 - `package.json`: VS Code 확장 메타데이터
 
 ## 참고
 
 점랭 언어 사양과 예제는 원본 사이트와 원본 GitHub 저장소를 기준으로 확인하세요. 이 저장소는 VS Code 실행 환경을 붙이는 용도입니다.
-
-## GitHub Actions 봇 커밋 데모
-
-`github-actions[bot]` 커밋을 테스트하려면 GitHub 저장소의 Actions 탭에서 `Actions Bot Demo` 워크플로를 수동 실행하면 됩니다.
-
-실행하면 GitHub 서버에서 `ACTIONS_BOT_DEMO.md`를 갱신하고, `github-actions[bot]` author로 커밋합니다.

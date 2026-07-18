@@ -10,18 +10,9 @@ const OFFICIAL_DIR = path.join(__dirname, '..', 'official');
 const VERSION_FILE = path.join(OFFICIAL_DIR, '.version');
 
 const FILES = [
-  { name: 'cli.js', localPaths: [
-      path.join(__dirname, '..', '..', 'core', 'cli.js'),
-      path.join(__dirname, '..', '..', '..', 'core', 'cli.js')
-    ], url: 'https://jeomlang.vercel.app/core/cli.js' },
-  { name: 'engine.js', localPaths: [
-      path.join(__dirname, '..', '..', 'core', 'engine.js'),
-      path.join(__dirname, '..', '..', '..', 'core', 'engine.js')
-    ], url: 'https://jeomlang.vercel.app/core/engine.js' },
-  { name: 'std.jeom', localPaths: [
-      path.join(__dirname, '..', '..', 'stdlib', 'std.jeom'),
-      path.join(__dirname, '..', '..', '..', 'stdlib', 'std.jeom')
-    ], url: 'https://jeomlang.vercel.app/stdlib/std.jeom' }
+  { name: 'cli.js', localPath: path.join(__dirname, '..', '..', '..', 'core', 'cli.js'), url: 'https://jeomlang.vercel.app/core/cli.js' },
+  { name: 'engine.js', localPath: path.join(__dirname, '..', '..', '..', 'core', 'engine.js'), url: 'https://jeomlang.vercel.app/core/engine.js' },
+  { name: 'std.jeom', localPath: path.join(__dirname, '..', '..', '..', 'stdlib', 'std.jeom'), url: 'https://jeomlang.vercel.app/stdlib/std.jeom' }
 ];
 
 function downloadFile(url, filepath) {
@@ -59,14 +50,10 @@ async function updateOfficialFiles() {
     const filepath = path.join(OFFICIAL_DIR, file.name);
     // 우선 로컬 core/ 또는 stdlib/에서 복사 시도
     let copied = false;
-    if (file.localPaths) {
-      for (const lp of file.localPaths) {
-        if (fs.existsSync(lp)) {
-          fs.copyFileSync(lp, filepath);
-          console.log(`📁 ${file.name} 복사 완료 (로컬): ${lp}`);
-          copied = true; break;
-        }
-      }
+    if (file.localPath && fs.existsSync(file.localPath)) {
+      fs.copyFileSync(file.localPath, filepath);
+      console.log(`📁 ${file.name} 복사 완료 (로컬): ${file.localPath}`);
+      copied = true;
     }
     if (copied) continue;
 

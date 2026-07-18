@@ -7,7 +7,7 @@ Built with Flask (Python) and bridges to the JeomLang engine via Node.js.
 ## Requirements
 
 - Python 3.8+
-- Node.js 16+
+- Node.js 18+
 - npm
 
 ## Installation

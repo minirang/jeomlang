@@ -254,7 +254,7 @@ await vm.run(sourceCode);
 ## VS Code 확장
 
 [`tools/vscode-extension/`](tools/vscode-extension/) 에 포함되어 있습니다.<br>
-[`https://github.com/captain34643875-wq/JeomLang-VScode`](https://github.com/captain34643875-wq/JeomLang-VScode) 에서도 확인하실수 있습니다.<br>
+[`https://github.com/captain34643875-wq/JeomLang-VScode`](https://github.com/captain34643875-wq/JeomLang-VScode) 에서도 확인하실 수 있습니다.<br>
 구문 강조, 코드 스니펫, 언어 설정을 제공합니다.
 
 -----

@@ -3,7 +3,7 @@ param(
     (Join-Path $env:USERPROFILE ".vscode\extensions"),
     (Join-Path $env:USERPROFILE ".cursor\extensions")
   ),
-  [string]$ExtensionId = "local.jeom-vscode-runner-0.2.0"
+  [string]$ExtensionId = "local.jeom-vscode-runner-0.2.1"
 )
 
 $ErrorActionPreference = "Stop"
@@ -28,7 +28,7 @@ $dirs = @(
   "syntaxes"
 )
 
-$externalIcon = Join-Path $repoRoot "..\assets\img\icon.png"
+$externalIcon = Join-Path $repoRoot "..\..\assets\img\icon.png"
 
 foreach ($installRoot in $InstallRoots) {
   if (-not (Test-Path $installRoot)) {

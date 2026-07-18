@@ -4,7 +4,9 @@
 
 - Added JeomLang web server for check grammar error, output.
 - Added server/README.md.
-To download JeomLang vscode extension, visit [this](https://github.com/minirang/jeomlang/releases/tag/v1.7.5)
+- VS Code 확장 번들(`official/`)을 최신 엔진과 동기화했습니다.
+
+To download JeomLang vscode extension, visit [this](https://github.com/minirang/jeomlang/releases/tag/v1.7.6)
 
 ---
 
@@ -84,7 +86,7 @@ To download JeomLang vscode extension, visit [this](https://github.com/minirang/
 ## Updates
 
 - Improved error message.
-- Fixed miner bugs.
+- Fixed minor bugs.
 
 ---
 
@@ -93,7 +95,7 @@ To download JeomLang vscode extension, visit [this](https://github.com/minirang/
 ## Updates
 
 - Fixed float type.
-- Fixed miner bugs.
+- Fixed minor bugs.
 
 ---
 
@@ -102,7 +104,7 @@ To download JeomLang vscode extension, visit [this](https://github.com/minirang/
 ## Updates
 
 - Migrated the IDE script language from JavaScript to TypeScript.
-- Fixed miner bugs.
+- Fixed minor bugs.
 
 ---
 

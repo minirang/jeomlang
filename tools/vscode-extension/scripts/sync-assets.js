@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const repoRoot = path.join(__dirname, '..');
-const sourceIcon = path.join(repoRoot, '..', 'assets', 'img', 'icon.png');
+const sourceIcon = path.join(repoRoot, '..', '..', 'assets', 'img', 'icon.png');
 const targetDir = path.join(repoRoot, 'assets');
 const targetIcon = path.join(targetDir, 'icon.png');
 

@@ -1,3 +1,13 @@
+/**
+ * engine.js  —  점랭(JeomLang) 언어 통합 엔진
+ *
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │  렉서(tokenize) + 파서(parse) + VM(JeomVM) 통합 파일        │
+ * │  UMD 포맷 — 브라우저 <script> 와 Node.js 양쪽에서 동작      │
+ * └─────────────────────────────────────────────────────────────┘
+ */
+
+/* global module, globalThis */
 (function (root, factory) {
   'use strict';
   if (typeof module !== 'undefined' && module.exports) {
@@ -7,12 +17,19 @@
   }
 }(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  var VERSION = '1.1.0';
+
+  var VERSION = '1.7.6';
+
+  // ══════════════════════════════════════════════════════════════
+  // §1  상수
+  // ══════════════════════════════════════════════════════════════
+
   var DOT_CHARS = new Set([
     '\u002E','\u00B7','\u02D9','\u2022','\u2024','\u2025',
     '\u2026','\u2027','\u2218','\u22C5','\u25CF','\u25E6',
     '\u2981','\u2E33','\u22EE','\u22EF','\u25D8',
   ]);
+
   var C = {
     COMMENT:   '\u25D8',
     NUM_DELIM: '\u2022',
@@ -24,6 +41,11 @@
     MAIN_RAW:  '\u2022\u00B7',
     SPACE:     new Set([' ','\t','\n','\r','\f','\v']),
   };
+
+  // ══════════════════════════════════════════════════════════════
+  // §2  OP_TABLE
+  // ══════════════════════════════════════════════════════════════
+
   var OP_TABLE = {
     '\u2218':'\u0056\u0041\u0052',
     '\u2218\u2218':'GET',
@@ -122,7 +144,14 @@
     '\u22EE\u2027\u2027':'HASH',
     '\u22EE\u2027\u2027\u2027':'REGEX',
   };
+
+  // VAR 값은 heredoc 안에서 깨지므로 직접 할당
   OP_TABLE['\u2218'] = 'VAR';
+
+  // ══════════════════════════════════════════════════════════════
+  // §3  에러 클래스
+  // ══════════════════════════════════════════════════════════════
+
   function JeomError(msg)  { this.message = msg; this.name = 'JeomError'; }
   function JeomBreak()     { this.name = 'JeomBreak'; }
   function JeomContinue()  { this.name = 'JeomContinue'; }
@@ -130,6 +159,11 @@
   function JeomGoto(lbl)   { this.name = 'JeomGoto';   this.label = lbl; }
   function JeomExit(code)  { this.name = 'JeomExit';   this.exitCode = code; }
   JeomError.prototype = Object.create(Error.prototype);
+
+  // ══════════════════════════════════════════════════════════════
+  // §4  인코딩 유틸
+  // ══════════════════════════════════════════════════════════════
+
   function encodeString(s) {
     var bytes = (typeof TextEncoder !== 'undefined')
       ? Array.from(new TextEncoder().encode(s))
@@ -139,11 +173,13 @@
            .join(C.BYTE_SEP) +
       C.STR_DELIM;
   }
+
   function encodeNumber(n) {
     n = Math.trunc(n);
     if (n === 0) return C.NUM_DELIM + C.NUM_DELIM;
     return C.NUM_DELIM + Math.abs(n).toString(2).replace(/0/g,C.ZERO).replace(/1/g,C.ONE) + C.NUM_DELIM;
   }
+
   function encodeFloat(n) {
     if (!isFinite(n)) throw new JeomError('encodeFloat: 유한수만 지원합니다');
     var neg = n < 0; n = Math.abs(n);
@@ -161,6 +197,7 @@
     var b2d = function(arr){ return arr.map(function(x){return x?C.ONE:C.ZERO;}).join(''); };
     return C.NUM_DELIM + b2d(intBits) + C.FLOAT_SEP + b2d(fracBits) + C.NUM_DELIM;
   }
+
   function decodeString(s) {
     s = (s||'').trim();
     if (!s.startsWith(C.STR_DELIM)||!s.endsWith(C.STR_DELIM)) return null;
@@ -173,6 +210,7 @@
       ? new TextDecoder().decode(new Uint8Array(bytes))
       : Buffer.from(bytes).toString('utf8');
   }
+
   function decodeNumber(s) {
     s = (s||'').trim();
     if (!s.startsWith(C.NUM_DELIM)||!s.endsWith(C.NUM_DELIM)) return null;
@@ -190,9 +228,15 @@
     },0) : 0;
     return intVal + fracVal;
   }
+
+  // ══════════════════════════════════════════════════════════════
+  // §5  렉서
+  // ══════════════════════════════════════════════════════════════
+
   function tokenize(source) {
     var tokens = [];
     var pos = 0, line = 1, col = 1;
+
     function peek(o){ return source[pos+(o||0)]; }
     function adv(){
       var ch=source[pos++];
@@ -207,6 +251,7 @@
         else break;
       }
     }
+
     function readNumber(sl,sc){
       var raw=C.NUM_DELIM, bits=[], fpIdx=null;
       while(pos<source.length){
@@ -229,6 +274,7 @@
       }
       return {type:'NUMBER',value:parseInt(bits.join(''),2),raw:raw,line:sl,col:sc};
     }
+
     function readString(sl,sc){
       var raw=C.STR_DELIM, cur=[], bytes=[];
       while(pos<source.length){
@@ -253,13 +299,16 @@
         : Buffer.from(bytes).toString('utf8');
       return {type:'STRING',value:value,raw:raw,line:sl,col:sc};
     }
+
     while(pos<source.length){
       skipWS();
       if(pos>=source.length) break;
       var ch=source[pos], sl=line, sc=col;
       if(!DOT_CHARS.has(ch))
         throw new JeomError('L'+sl+':C'+sc+': 허용안되는 문자 \''+ch+'\' (U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')+')');
+
       if(ch===C.NUM_DELIM){
+        // MAIN marker: •· 다음이 공백/EOF/주석인 경우만
         var nx=peek(1), afx=peek(2);
         if(nx===C.ONE&&(!afx||C.SPACE.has(afx)||afx===C.COMMENT)){
           adv();adv();
@@ -285,6 +334,11 @@
     tokens.push({type:'EOF',value:null,raw:'',line:line,col:col});
     return tokens;
   }
+
+  // ══════════════════════════════════════════════════════════════
+  // §6  파서
+  // ══════════════════════════════════════════════════════════════
+
   function parse(tokens){
     var pos=0;
     function peek(o){return tokens[pos+(o||0)]||{type:'EOF'};}
@@ -356,6 +410,7 @@
     }
     function parseStmt(){
       var t=peek(), ln=t.line, op=opName(t);
+      // MAIN marker를 NUMBER보다 먼저 체크 (★핵심 수정)
       if(isMain()) return parseMain();
       if(t.type==='NUMBER'){adv();return {type:'PUSH',expr:{type:'NUM_LIT',value:t.value},line:ln};}
       if(t.type==='STRING'){adv();return {type:'PUSH',expr:{type:'STR_LIT',value:t.value},line:ln};}
@@ -393,6 +448,11 @@
     while(peek().type!=='EOF'){var s=parseStmt();if(s)stmts.push(s);}
     return stmts;
   }
+
+  // ══════════════════════════════════════════════════════════════
+  // §7  VM
+  // ══════════════════════════════════════════════════════════════
+
   function JeomVM(opts){
     opts=opts||{};
     this.stdout     =opts.stdout     ||function(){};
@@ -412,6 +472,7 @@
     this.stack=[]; this.env={}; this.functions={}; this.modules={};
     this.callDepth=0; this.stepCount=0;
   }
+
   JeomVM.prototype.run = async function(source){
     this.stepCount=0;
     var toks=tokenize(source), stmts=parse(toks);
@@ -421,6 +482,7 @@
     if(!main) throw new JeomError('main 블록(•·...⋮⋮)이 없습니다');
     await this._execList(main.body);
   };
+
   JeomVM.prototype._push=function(v){this.stack.push(v);};
   JeomVM.prototype._pop=function(){
     if(!this.stack.length) throw new JeomError('스택 언더플로우');
@@ -439,6 +501,7 @@
     var fn={args:node.args,body:node.body,closure:Object.assign({},this.env),_isFunc:true};
     this.functions[node.name]=fn; this.env[node.name]=fn;
   };
+
   JeomVM.prototype._execList=async function(stmts){
     var i=0;
     while(i<stmts.length){
@@ -459,6 +522,7 @@
       i++;
     }
   };
+
   JeomVM.prototype._exec=async function(node){
     if(!node) return;
     if(Array.isArray(node)){await this._execList(node);return;}
@@ -490,6 +554,7 @@
       default: throw new JeomError('알 수 없는 노드: \''+node.type+'\'');
     }
   };
+
   JeomVM.prototype._eval=async function(node){
     switch(node.type){
       case 'NUM_LIT': return node.value;
@@ -499,6 +564,7 @@
       default: await this._exec(node); return this._pop();
     }
   };
+
   JeomVM.prototype._execIf=async function(node){
     var cond=this._pop();
     if(this._truthy(cond)){await this._execList(node.thenBody);return;}
@@ -508,6 +574,7 @@
     }
     if(node.elseBody) await this._execList(node.elseBody);
   };
+
   JeomVM.prototype._execLoop=async function(node){
     var count=Math.max(0,Math.floor(this._num(this._pop())));
     for(var i=0;i<count;i++){
@@ -519,6 +586,7 @@
       }
     }
   };
+
   JeomVM.prototype._execWhile=async function(node){
     var guard=0;
     while(true){
@@ -533,6 +601,7 @@
       }
     }
   };
+
   JeomVM.prototype._execTry=async function(node){
     try{await this._execList(node.tryBody);}
     catch(e){
@@ -543,11 +612,13 @@
       if(node.finallyBody) await this._execList(node.finallyBody);
     }
   };
+
   JeomVM.prototype._callByName=async function(name){
     var fn=this.functions[name]||(Object.prototype.hasOwnProperty.call(this.env,name)?this.env[name]:null);
     if(!fn||!fn.args) throw new JeomError('정의되지 않은 함수: \''+name+'\'');
     await this._callFn(fn);
   };
+
   JeomVM.prototype._callFn=async function(fn){
     if(!fn||!fn.args) throw new JeomError('함수 객체 아님');
     this.callDepth++;
@@ -565,6 +636,7 @@
       this.env=saved; this.callDepth--;
     }
   };
+
   JeomVM.prototype._doImport=async function(){
     var path=String(this._pop());
     if(this.modules[path]){
@@ -587,6 +659,7 @@
     Object.assign(this.env,sub.env);
     Object.assign(this.functions,sub.functions);
   };
+
   JeomVM.prototype._execInstr=async function(op){
     var a,b,v,n,fn,arr,d,k,i,res,parts,fh,r;
     switch(op){
@@ -764,6 +837,7 @@
       default: throw new JeomError('알 수 없는 명령: \''+op+'\'');
     }
   };
+
   JeomVM.prototype._truthy=function(v){
     if(v===null||v===undefined) return false;
     if(typeof v==='number') return v!==0;
@@ -792,6 +866,11 @@
       return '{'+Object.entries(v).map(function(e){return e[0]+': '+self._disp(e[1]);}).join(', ')+'}';
     return String(v);
   };
+
+  // ══════════════════════════════════════════════════════════════
+  // §8  공개 API
+  // ══════════════════════════════════════════════════════════════
+
   return {
     VERSION:VERSION,
     encodeString:encodeString, encodeNumber:encodeNumber, encodeFloat:encodeFloat,
