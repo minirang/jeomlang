@@ -30,6 +30,7 @@
     "onCommand:jeom.checkFile"
   ],
   "engines": {
+    "node": ">=18.0.0",
     "vscode": "^1.80.0"
   },
   "categories": [

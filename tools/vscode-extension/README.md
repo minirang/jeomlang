@@ -36,13 +36,13 @@ VS Code에서 점랭(`.jeom`) 파일을 바로 실행하기 위한 확장 프로
 현재 열린 `.jeom` 파일을 아래 명령으로 실행합니다.
 
 ```powershell
-node official\cli.js run <현재 .jeom 파일>
+node ./official/cli.js run <현재 .jeom 파일>
 ```
 
 문법 검사는 아래 명령으로 실행합니다.
 
 ```powershell
-node official\cli.js check <현재 .jeom 파일>
+node ./official/cli.js check <현재 .jeom 파일>
 ```
 
 확장은 워크스페이스의 `core/cli.js`(공식 리포) 또는 `official/cli.js`(이 리포 번들)를 사용합니다.
@@ -108,7 +108,7 @@ npm run update-jeom
 
 ```json
 {
-  "jeom.cliPath": "${workspaceFolder}\\official\\cli.js"
+  "jeom.cliPath": "${workspaceFolder}/official/cli.js"
 }
 ```
 
