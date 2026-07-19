@@ -1,4 +1,4 @@
-# <img src="../../assets/img/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner
+# <img src="assets/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner
 
 <p>
   <a href="README.md">📖 <strong>README</strong></a>
