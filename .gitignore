@@ -1,6 +1,4 @@
 node_modules/
 .vercel/
-.DS_Store
-Thumbs.db
 .eslintcache
 jeom-vscode-runner-0.2.1.vsix
