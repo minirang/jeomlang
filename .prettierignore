@@ -1,14 +1,11 @@
-# 의존성 및 빌드 결과물
 node_modules/
 dist/
 ide/dist/
 .vercel/
-# VS Code 확장 프로그램 개발 폴더
 tools/vscode-extension/
 # 자체 언어 파일
 *.jeom
 examples/
 stdlib/
-# 운영체제 자동 생성 숨김 파일
 .DS_Store
 Thumbs.db
