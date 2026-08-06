@@ -1,0 +1,25 @@
+{
+    "id": "/",
+    "name": "JeomLang",
+    "short_name": "jeomlang",
+    "description": "The official website of JeomLang, an esoteric programming language.",
+    "lang": "en",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#ffffff",
+    "theme_color": "#0f172a",
+    "categories": [
+        "developer",
+        "education"
+    ],
+    "icons": [
+        {
+            "src": "/assets/img/logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ]
+}
