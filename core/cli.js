@@ -21,8 +21,6 @@
 const fs = require('fs');
 const path = require('path');
 const rl = require('readline');
-
-// engine.js 로드
 const enginePath = path.join(__dirname, 'engine.js');
 if (!fs.existsSync(enginePath)) {
     console.error('오류: engine.js 를 찾을 수 없습니다. 같은 디렉터리에 있어야 합니다.');
@@ -42,7 +40,6 @@ const {
     VERSION,
 } = JeomEngine;
 
-// ── 색상 ──────────────────────────────────────────────────────────────────────
 const USE_COLOR = process.stdout.isTTY;
 const clr = (t, c) => USE_COLOR ? `\x1b[${c}m${t}\x1b[0m` : t;
 const bold = t => clr(t, '1');
@@ -301,7 +298,6 @@ ${gray('────────────────────────
                     try {
                         const toks = tokenize(wrapped);
                         const ast = parse(toks);
-                        // 새 함수 등록
                         ast.forEach(n => {
                             if (n.type === 'FUNCDEF') vm._registerFunc(n);
                         });
