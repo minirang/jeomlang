@@ -32,3 +32,40 @@ git push origin feature/your-feature
 
 - 특별한 이유가 없다면 기존 문법을 깨지 않습니다.
 - 변경된 내용을 구체적으로 알려줘야 합니다.
+
+---
+
+# Contribution Guide
+
+Thank you for your interest in this project!
+
+## How to Contribute
+
+1. Fork this repository.
+2. Create a new branch:
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Make your changes.
+4. Test if it works properly.
+
+5. Commit your changes:
+
+```bash
+git commit -m "Add: Feature description"
+```
+
+6. Push to your forked repository:
+
+```bash
+git push origin feature/your-feature
+```
+
+7. Create a Pull Request.
+
+## Rules
+
+- Do not break existing syntax unless there is a specific reason.
+- You must clearly describe the changes you made.
