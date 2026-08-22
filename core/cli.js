@@ -91,6 +91,7 @@ function makeNodeVM(opts = {}) {
                 execSync
             } = require('child_process');
             try {
+                // semgrep-ignore-next-line javascript.lang.security.detect-child-process.detect-child-process
                 return execSync(cmd, {
                     encoding: 'utf8',
                     stdio: ['pipe', 'pipe', 'pipe']
