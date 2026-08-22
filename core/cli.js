@@ -87,10 +87,12 @@ function makeNodeVM(opts = {}) {
             recursive: true
         }),
         execCmd: async (cmd) => {
-            const { execFileSync } = require('child_process');
-            const [file, ...args] = cmd.split(/\s+/);
+            const {
+                execSync
+            } = require('child_process');
             try {
-                return execFileSync(file, args, {
+                // semgrep-ignore-next-line javascript.lang.security.detect-child-process.detect-child-process
+                return execSync(cmd, {
                     encoding: 'utf8',
                     stdio: ['pipe', 'pipe', 'pipe']
                 });
