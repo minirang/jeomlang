@@ -87,11 +87,10 @@ function makeNodeVM(opts = {}) {
             recursive: true
         }),
         execCmd: async (cmd) => {
-            const {
-                execSync
-            } = require('child_process');
+            const { execFileSync } = require('child_process');
+            const [file, ...args] = cmd.split(/\s+/);
             try {
-                return execSync(cmd, {
+                return execFileSync(file, args, {
                     encoding: 'utf8',
                     stdio: ['pipe', 'pipe', 'pipe']
                 });
