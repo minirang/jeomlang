@@ -6,7 +6,7 @@
 
 ## 형식
 
-모든 커밋 메시지는 헤더(필수), 본문(선택), 바닥글(선택)로 구성되어야 합니다.
+모든 커밋 메시지와 Pull Request 제목은 헤더(필수), 본문(선택), 바닥글(선택)로 구성되어야 합니다.
 
 [형식 템플릿]
 type(scope): subject
@@ -103,7 +103,7 @@ This project follows the Conventional Commits specification to maintain a clean 
 
 ## Format
 
-Every commit message must consist of a header (compulsory), a body (optional), and a footer (optional).
+Every commit message and Pull Request title must consist of a header (compulsory), a body (optional), and a footer (optional).
 
 [Format Template]
 type(scope): subject
