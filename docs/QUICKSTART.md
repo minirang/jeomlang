@@ -1,4 +1,4 @@
-# 빠른 시작
+# 빠른 시작 (한국어)
 
 JeomLang을 처음 사용하는 경우 아래 방법 중 하나로 바로 실행해 볼 수 있습니다.
 
@@ -110,7 +110,7 @@ JeomLang의 문법과 언어 기능을 자세히 알아보려면 다음 문서�
 
 ---
 
-# Quick Start
+# Quick Start (English)
 
 If you are new to JeomLang, you can get started immediately using one of the methods below.
 

@@ -1,4 +1,4 @@
-# JeomLang 커밋 메시지 가이드
+# JeomLang 커밋 메시지 가이드 (한국어)
 
 이 프로젝트는 깔끔한 git 히스토리를 유지하기 위해 Conventional Commits 사양을 따릅니다.
 
@@ -95,7 +95,7 @@ Fixes: #12
 
 ---
 
-# JeomLang Commit Message Guide
+# JeomLang Commit Message Guide (English)
 
 This project follows the Conventional Commits specification to maintain a clean git history.
 
