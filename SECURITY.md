@@ -33,3 +33,41 @@
 
 이 프로젝트는 실험적인 프로젝트로, 예상치 못한 동작이 발생할 수 있습니다.
 하지만 보안 관련 문제는 최대한 신중하게 처리합니다.
+
+---
+
+# Security Policy
+
+Thank you for reporting security vulnerabilities in this project and cooperating with us safely.
+
+## Supported Versions
+
+Versions currently receiving security updates:
+
+- Version 1.1.0 or higher (Latest version, as of 2026/5/9)
+
+Security patches may not be guaranteed for older versions.
+
+## How to Report a Vulnerability
+
+If you find a security vulnerability, please register it as a public issue and describe it in detail in the discussions:
+
+- Post on GitHub Issues or contact privately
+- Include detailed reproduction steps if possible
+
+## Useful Information to Include
+
+- Vulnerability description
+- Steps to reproduce
+- Scope of impact
+- PoC (Proof of Concept) if available
+
+## Response Policy
+
+- We will review your report as quickly as possible upon receipt.
+- We will release patches and updates if necessary.
+
+## Note
+
+This is an experimental project, so unexpected behavior may occur.
+However, we handle security-related issues with the utmost care.
