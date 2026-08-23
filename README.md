@@ -261,7 +261,7 @@ await vm.run(sourceCode);
 
 ## 기여
 
-[<CONTRIBUTING.md>](CONTRIBUTING.md) 를 참고해 주세요.
+[CONTRIBUTING.md](CONTRIBUTING.md) 를 참고해 주세요.
 
 -----
 
