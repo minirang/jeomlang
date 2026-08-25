@@ -61,9 +61,9 @@ JeomLang 생태계의 어느 부분을 수정하는지 명시하기 위해 다�
 ## 좋은 예시 (Good Examples)
 
 ### 단일 행 커밋
-feat(core): implement mapping for new unicode dot characters
-fix(interpreter): correct negative number calculation error
-docs: add CONTRIBUTING.md for external contributors
+- feat(core): implement mapping for new unicode dot characters
+- fix(interpreter): correct negative number calculation error
+- docs: add CONTRIBUTING.md for external contributors
 
 ### 본문과 바닥글이 포함된 다중 행 커밋
 fix(parser): resolve parsing failure on consecutive whitespaces
@@ -158,9 +158,9 @@ Use these scopes to specify which part of the JeomLang ecosystem you are modifyi
 ## Good Examples
 
 ### Single-line commit
-feat(core): implement mapping for new unicode dot characters
-fix(interpreter): correct negative number calculation error
-docs: add CONTRIBUTING.md for external contributors
+- feat(core): implement mapping for new unicode dot characters
+- fix(interpreter): correct negative number calculation error
+- docs: add CONTRIBUTING.md for external contributors
 
 ### Multi-line commit with body and footer
 fix(parser): resolve parsing failure on consecutive whitespaces
