@@ -1,4 +1,4 @@
-# 기여 가이드
+# 기여 가이드 (한국어)
 
 이 프로젝트에 관심을 가져주셔서 감사합니다!
 
@@ -35,7 +35,7 @@ git push origin feature/your-feature
 
 ---
 
-# Contribution Guide
+# Contribution Guide (English)
 
 Thank you for your interest in this project!
 
