@@ -1,3 +1,14 @@
+## v1.7.7 - 2026-08-27
+
+## Updates
+
+- Translate Korean-only or English-only documents
+- Removed comments in some files
+
+To download JeomLang vscode extension, visit [this](https://github.com/minirang/jeomlang/releases/tag/v1.7.5)
+
+---
+
 ## v1.7.6 - 2026-06-27
 
 ## Updates
