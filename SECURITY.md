@@ -1,4 +1,4 @@
-# 보안 정책 (Security Policy)
+# 보안 정책 (Security Policy) (한국어)
 
 이 프로젝트의 보안 취약점을 안전하게 보고하고 협력해 주셔서 감사합니다.
 
@@ -36,7 +36,7 @@
 
 ---
 
-# Security Policy
+# Security Policy (English)
 
 Thank you for reporting security vulnerabilities in this project and cooperating with us safely.
 
