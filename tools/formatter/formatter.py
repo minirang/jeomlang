@@ -30,55 +30,50 @@ from __future__ import annotations
 import sys, os, json, subprocess, argparse, shutil
 from typing import Dict, List, Optional, Tuple
 
-# ── 상수 ──────────────────────────────────────────────────────────────────────
-COMMENT_CHAR = '\u25D8'        # ◘
-MAIN_RAW     = '\u2022\u00B7'  # •·
-BLOCK_OPEN   = '\u22EE'        # ⋮
-FUNC_DEF     = '\u02D9'        # ˙
-FUNC_ARG     = '\u02D9\u2218'  # ˙∘
-VAR_OP       = '\u2218'        # ∘
-GET_OP       = '\u2218\u2218'  # ∘∘
-STORE_OP     = '\u2218\u22C5'  # ∘⋅
-DEL_OP       = '\u2218\u2218\u2218'  # ∘∘∘
+COMMENT_CHAR = '\u25D8'       
+MAIN_RAW     = '\u2022\u00B7' 
+BLOCK_OPEN   = '\u22EE'       
+FUNC_DEF     = '\u02D9'       
+FUNC_ARG     = '\u02D9\u2218' 
+VAR_OP       = '\u2218'       
+GET_OP       = '\u2218\u2218' 
+STORE_OP     = '\u2218\u22C5' 
+DEL_OP       = '\u2218\u2218\u2218' 
 
-# depth -1 후 독립 줄로 출력되는 토큰들
 BLOCK_END_OPS = {
-    '\u22EE\u22EE',           # ⋮⋮ END
-    '\u2026\u00B7',           # …· ELSE
-    '\u2026\u2025',           # …‥ ELIF
-    '\u2025\u00B7\u00B7',     # ‥·· CATCH
-    '\u2025\u00B7\u02D9',     # ‥·˙ FINALLY
+    '\u22EE\u22EE',          
+    '\u2026\u00B7',          
+    '\u2026\u2025',          
+    '\u2025\u00B7\u00B7',    
+    '\u2025\u00B7\u02D9',    
 }
 
-# flush 후 독립 줄에 출력되는 명령들
 NEWLINE_OPS = {
-    '\u2026',                 # … IF
-    '\u2025\u2025',           # ‥‥ WHILE
-    '\u2025',                 # ‥ LOOP
-    '\u2025\u00B7',           # ‥· TRY
-    '\u2025\u00B7\u2218',     # ‥·∘ THROW
-    '\u2025\u00B7\u2981',     # ‥·⦁ ASSERT
-    '\u02D9\u02D9\u02D9',     # ˙˙˙ CALL  (+ 이름)
-    '\u02D9\u02D9',           # ˙˙ RET
-    '\u2025\u2218',           # ‥∘ BREAK
-    '\u2025\u2218\u2218',     # ‥∘∘ CONT
-    '\u22EF',                 # ⋯ GOTO    (+ 이름)
-    '\u22EF\u00B7',           # ⋯· LABEL  (+ 이름)
-    '\u00B7',                 # · PRINT
-    '\u00B7\u00B7',           # ·· PRINTLN
-    '\u00B7\u2218',           # ·∘ ERR
-    '\u22EE\u2218',           # ⋮∘ EXIT
-    '\u22EF\u00B7\u2981',     # ⋯·⦁ IMPORT
+    '\u2026',                
+    '\u2025\u2025',          
+    '\u2025',                
+    '\u2025\u00B7',          
+    '\u2025\u00B7\u2218',    
+    '\u2025\u00B7\u2981',    
+    '\u02D9\u02D9\u02D9',    
+    '\u02D9\u02D9',          
+    '\u2025\u2218',          
+    '\u2025\u2218\u2218',    
+    '\u22EF',                
+    '\u22EF\u00B7',          
+    '\u00B7',                
+    '\u00B7\u00B7',          
+    '\u00B7\u2218',          
+    '\u22EE\u2218',          
+    '\u22EF\u00B7\u2981',    
 }
 
-# NEWLINE_OPS 중 뒤에 이름 토큰이 따라오는 것들
 NEWLINE_OPS_WITH_NAME = {
-    '\u02D9\u02D9\u02D9',  # ˙˙˙ CALL
-    '\u22EF',              # ⋯ GOTO
-    '\u22EF\u00B7',        # ⋯· LABEL
+    '\u02D9\u02D9\u02D9', 
+    '\u22EF',             
+    '\u22EF\u00B7',       
 }
 
-# ── JS 파서 인라인 스니펫 ─────────────────────────────────────────────────────
 _JS = r"""
 'use strict';
 const E = require(process.env._JEOM_ENGINE);
@@ -104,7 +99,6 @@ process.stdin.on('end', () => {
 });
 """
 
-# ── 엔진 탐색 ─────────────────────────────────────────────────────────────────
 def _find_engine(script_dir: str) -> Optional[str]:
     for c in [
         os.path.join(script_dir, 'engine.js'),
@@ -116,7 +110,6 @@ def _find_engine(script_dir: str) -> Optional[str]:
             return p
     return None
 
-# ── JS 파싱 호출 ──────────────────────────────────────────────────────────────
 def parse_with_js(source: str, engine_path: str) -> Tuple[bool, dict]:
     node = shutil.which('node') or shutil.which('nodejs')
     if not node:
@@ -144,7 +137,6 @@ def parse_with_js(source: str, engine_path: str) -> Tuple[bool, dict]:
         return False, {'error': data.get('error', '알 수 없는 파서 오류')}
     return True, data
 
-# ── 포맷터 ────────────────────────────────────────────────────────────────────
 class Formatter:
     def __init__(self, tokens: List[dict], comments: Dict[str, dict], indent: int = 2):
         self.tokens   = tokens
@@ -229,7 +221,6 @@ class Formatter:
             tt  = t['type']
             raw = t['raw']
 
-            # ── 블록 닫기 ────────────────────────────────────────────────
             if tt == 'OP' and raw in BLOCK_END_OPS:
                 self._adv()
                 self._flush()
@@ -238,7 +229,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── 블록 열기 ⋮ ──────────────────────────────────────────────
             if tt == 'OP' and raw == BLOCK_OPEN:
                 self._adv()
                 self._flush()
@@ -247,7 +237,6 @@ class Formatter:
                 self.depth += 1
                 continue
 
-            # ── MAIN marker •· ───────────────────────────────────────────
             if tt == 'NUMBER' and raw == MAIN_RAW:
                 self._adv()
                 self._flush()
@@ -257,7 +246,6 @@ class Formatter:
                 self.depth += 1
                 continue
 
-            # ── 함수 정의 ˙ <이름> ───────────────────────────────────────
             if tt == 'OP' and raw == FUNC_DEF:
                 self._adv()
                 self._flush()
@@ -268,7 +256,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── 함수 인자 ˙∘ <이름> ─────────────────────────────────────
             if tt == 'OP' and raw == FUNC_ARG:
                 self._adv()
                 self._flush()
@@ -278,15 +265,14 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── VAR: ∘ <이름> <값> ──────────────────────────────────────
             if tt == 'OP' and raw == VAR_OP:
                 self._adv()
                 self._flush()
                 self._cur.append(raw)
-                # 이름
+               
                 if self._next_is_name():
                     self._cur.append(self._adv()['raw'])
-                # 값 (NUMBER, STRING, OP 1개)
+               
                 nxt = self._peek()
                 if nxt:
                     if nxt['type'] in ('NUMBER', 'STRING'):
@@ -298,7 +284,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── GET: ∘∘ <이름> ──────────────────────────────────────────
             if tt == 'OP' and raw == GET_OP:
                 self._adv()
                 self._flush()
@@ -308,7 +293,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── STORE: ∘⋅ <이름> ────────────────────────────────────────
             if tt == 'OP' and raw == STORE_OP:
                 self._adv()
                 self._flush()
@@ -318,7 +302,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── DEL: ∘∘∘ <이름> ─────────────────────────────────────────
             if tt == 'OP' and raw == DEL_OP:
                 self._adv()
                 self._flush()
@@ -328,7 +311,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── 새 줄 명령들 ─────────────────────────────────────────────
             if tt == 'OP' and raw in NEWLINE_OPS:
                 self._adv()
                 self._flush()
@@ -338,7 +320,6 @@ class Formatter:
                 self._flush()
                 continue
 
-            # ── NUMBER / STRING / 일반 OP ────────────────────────────────
             self._adv()
             self._cur.append(raw)
 
@@ -346,7 +327,6 @@ class Formatter:
         self._emit_remaining_comments()
         self._flush()
 
-        # 연속 빈 줄 축소
         out: List[str] = []
         blank = 0
         for line in self._lines:
@@ -363,7 +343,6 @@ class Formatter:
             result += '\n'
         return result
 
-# ── 파일 처리 ─────────────────────────────────────────────────────────────────
 def _try_remove(path: str):
     try:
         if os.path.exists(path):
@@ -418,7 +397,6 @@ def process_file(src_path: str, out_path: str, engine_path: str, opts: dict) -> 
 
     return True, out_path
 
-# ── 색상 ──────────────────────────────────────────────────────────────────────
 _COLOR = sys.stdout.isatty()
 def _c(t, code): return f'\033[{code}m{t}\033[0m' if _COLOR else t
 def _ok(m):   print(_c('✓', '32') + ' ' + m)
@@ -426,7 +404,6 @@ def _err(m):  print(_c('✗', '31') + ' ' + m, file=sys.stderr)
 def _warn(m): print(_c('!', '33') + ' ' + m)
 def _info(m): print(_c('·', '36') + ' ' + m)
 
-# ── CLI ───────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser(
         prog='formatter',
@@ -515,7 +492,6 @@ def main():
 
     if fail_count > 0:
         sys.exit(1)
-
 
 if __name__ == '__main__':
     main()
