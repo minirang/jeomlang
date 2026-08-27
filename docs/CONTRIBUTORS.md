@@ -6,4 +6,4 @@ Thank you for your contribution to this project! ✨
 
 | Name | GitHub | Contribution |
 |------|------|------|
-| captain34643875-wq | [@captain34643875-wq](https://github.com/captain34643875-wq) | make vscode extension and fix docs typos & collaborator|
+| captain34643875-wq | [@captain34643875-wq](https://github.com/captain34643875-wq) | make vscode extension and <br>fix docs typos & collaborator|
