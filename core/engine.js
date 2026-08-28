@@ -18,7 +18,7 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function() {
     'use strict';
 
-    var VERSION = '1.7.6';
+    var VERSION = '1.7.8';
 
     // ══════════════════════════════════════════════════════════════
     // 상수
