@@ -1,3 +1,13 @@
+## v1.7.8 - 2026-08-28
+
+## Updates
+
+- Improve documents
+
+To download JeomLang vscode extension, visit [this](https://github.com/minirang/jeomlang/releases/tag/v1.7.5)
+
+---
+
 ## v1.7.7 - 2026-08-27
 
 ## Updates
