@@ -147,7 +147,7 @@ jeom version                  # 버전 확인
 
 ## 코드 예제
 
-### Hello World
+### Hello World (Hello, Jeom!)
 
 ```jeom
 ◘ Hello, Jeom!
