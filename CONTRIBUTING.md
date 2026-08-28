@@ -1,6 +1,7 @@
 # 기여 가이드 (한국어)
 
 이 프로젝트에 관심을 가져주셔서 감사합니다!
+<br>
 기여는 언제나 환영입니다.
 
 ## 기여 방법
@@ -39,6 +40,7 @@ git push origin feature/your-feature
 # Contribution Guide (English)
 
 Thank you for your interest in this project!
+<br>
 Every contributions are welcome.
 
 ## How to Contribute
