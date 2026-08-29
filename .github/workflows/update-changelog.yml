@@ -1,77 +1,83 @@
 name: Update CHANGELOG on Release
 
-on:
-  release:
-    types:
-      - published
+'on':
+    release:
+        types:
+            - published
 
 permissions:
-  contents: write
-  pull-requests: write
+    contents: write
+    pull-requests: write
 
 jobs:
-  update-changelog:
-    runs-on: ubuntu-latest
+    update-changelog:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checkout main
+                uses: actions/checkout@v4
+                with:
+                    ref: main
+                    fetch-depth: 0
+            -
+                name: Prepare branch
+                shell: bash
+                run: |
+                    git pull --rebase origin main
+                    BRANCH="chore/update-changelog-${{
+                    github.event.release.tag_name }}"
+                    git checkout -b "$BRANCH"
+            -
+                name: Update changelog
+                shell: bash
+                run: |
+                    mkdir -p docs
 
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
+                    touch docs/CHANGELOG.md
 
-      - name: Prepare branch
-        shell: bash
-        run: |
-          git pull --rebase origin main
-          BRANCH="chore/update-changelog-${{ github.event.release.tag_name }}"
-          git checkout -b "$BRANCH"
+                    RELEASE_DATE=$(date -d "${{
+                    github.event.release.published_at }}" +"%Y-%m-%d")
 
-      - name: Update changelog
-        shell: bash
-        run: |
-          mkdir -p docs
-          touch docs/CHANGELOG.md
+                    {
+                      echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
+                      echo ""
+                      printf '%s\n' "${{ github.event.release.body }}"
 
-          RELEASE_DATE=$(date -d "${{ github.event.release.published_at }}" +"%Y-%m-%d")
+                      echo ""
+                      echo "---"
+                      echo ""
 
-          {
-            echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
-            echo ""
+                      cat docs/CHANGELOG.md
+                    } > temp.md
 
-            printf '%s\n' "${{ github.event.release.body }}"
+                    mv temp.md docs/CHANGELOG.md
+            -
+                name: Create pull request
+                shell: bash
+                env:
+                    GH_TOKEN: ${{ github.token }}
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email
+                    "41898282+github-actions[bot]@users.noreply.github.com"
 
-            echo ""
-            echo "---"
-            echo ""
+                    BRANCH="chore/update-changelog-${{
+                    github.event.release.tag_name }}"
 
-            cat docs/CHANGELOG.md
-          } > temp.md
+                    git add docs/CHANGELOG.md
 
-          mv temp.md docs/CHANGELOG.md
+                    if git diff --cached --quiet; then
+                      echo "No changes to commit"
+                      exit 0
+                    fi
 
-      - name: Create pull request
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git commit -m "docs(changelog): update for ${{
+                    github.event.release.tag_name }}"
 
-          BRANCH="chore/update-changelog-${{ github.event.release.tag_name }}"
+                    git push origin HEAD:"$BRANCH"
 
-          git add docs/CHANGELOG.md
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
-          git push origin HEAD:"$BRANCH"
-
-          gh pr create \
-            --base main \
-            --head "$BRANCH" \
-            --title "docs(changelog): update for ${{ github.event.release.tag_name }}" \
-            --body "Automatically update CHANGELOG for release ${{ github.event.release.tag_name }}."
+                    gh pr create \
+                      --base main \
+                      --head "$BRANCH" \
+                      --title "docs(changelog): update for ${{ github.event.release.tag_name }}" \
+                      --body "Automatically update CHANGELOG for release ${{ github.event.release.tag_name }}."
