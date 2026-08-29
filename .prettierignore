@@ -1,6 +1,8 @@
 node_modules/
+.vscode/
 dist/
 ide/dist/
+package-lock.json
 .vercel/
 tools/vscode-extension/
 # 자체 언어 파일

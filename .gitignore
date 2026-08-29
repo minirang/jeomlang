@@ -1,4 +1,10 @@
 node_modules/
+.env
 .vercel/
 .eslintcache
 jeom-vscode-runner-0.2.1.vsix
+.DS_Store
+Thumbs.db
+__pycache__/
+venv/
+.venv/
