@@ -1,4 +1,5 @@
 name: PR Conflict Check
+
 'on':
     pull_request:
         types:
