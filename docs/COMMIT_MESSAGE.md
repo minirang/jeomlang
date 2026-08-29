@@ -114,7 +114,7 @@ type(scope): subject
 
 - Type: Must be lowercase. Represents the intent of the commit.
 - Scope: Represents the affected module of the project. (Optional)
-- Subject: A concise description of the change. 
+- Subject: A concise description of the change.
   - Rule 1: Use the imperative mood (e.g., Use add instead of added, fix instead of fixed).
   - Rule 2: Start with lowercase and do not end with a period.
 
