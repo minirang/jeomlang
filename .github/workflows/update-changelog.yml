@@ -4,6 +4,7 @@ name: Update CHANGELOG on Release
     release:
         types:
             - published
+    workflow_dispatch:
 
 permissions:
     contents: write
