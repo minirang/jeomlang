@@ -24,8 +24,7 @@ jobs:
                 shell: bash
                 run: |
                     git pull --rebase origin main
-                    BRANCH="chore/update-changelog-${{
-                    github.event.release.tag_name }}"
+                    BRANCH="chore/update-changelog-${{ github.event.release.tag_name }}"
                     git checkout -b "$BRANCH"
             -
                 name: Update changelog
