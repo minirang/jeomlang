@@ -35,8 +35,7 @@ jobs:
 
                     touch docs/CHANGELOG.md
 
-                    RELEASE_DATE=$(date -d "${{
-                    github.event.release.published_at }}" +"%Y-%m-%d")
+                    RELEASE_DATE=$(date -d "${{ github.event.release.published_at }}" +"%Y-%m-%d")
 
                     {
                       echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
@@ -61,8 +60,7 @@ jobs:
                     git config user.email
                     "41898282+github-actions[bot]@users.noreply.github.com"
 
-                    BRANCH="chore/update-changelog-${{
-                    github.event.release.tag_name }}"
+                    BRANCH="chore/update-changelog-${{ github.event.release.tag_name }}"
 
                     git add docs/CHANGELOG.md
 
@@ -71,8 +69,7 @@ jobs:
                       exit 0
                     fi
 
-                    git commit -m "docs(changelog): update for ${{
-                    github.event.release.tag_name }}"
+                    git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
 
                     git push origin HEAD:"$BRANCH"
 
