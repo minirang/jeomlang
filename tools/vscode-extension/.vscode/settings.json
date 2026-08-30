@@ -1,8 +1,8 @@
 {
-  "files.associations": {
-    "*.jeom": "jeom"
-  },
-  "code-runner.executorMapByFileExtension": {
-    ".jeom": "node \"${workspaceFolder}\\official\\cli.js\" run \"$fullFileName\""
-  }
+    "files.associations": {
+        "*.jeom": "jeom"
+    },
+    "code-runner.executorMapByFileExtension": {
+        ".jeom": "node \"${workspaceFolder}\\official\\cli.js\" run \"$fullFileName\""
+    }
 }

@@ -1,160 +1,160 @@
 {
-  "name": "jeom-vscode-runner",
-  "displayName": "JEOM VS Code Runner",
-  "description": "VS Code runner and language helpers for JEOM .jeom files (targets jeomlang tools/vscode-extension).",
-  "version": "0.2.1",
-  "publisher": "local",
-  "private": true,
-  "icon": "assets/icon.png",
-  "license": "UNLICENSED",
-  "repository": {
-      "type": "git",
-      "url": "https://github.com/minirang/jeomlang.git",
+    "name": "jeom-vscode-runner",
+    "displayName": "JEOM VS Code Runner",
+    "description": "VS Code runner and language helpers for JEOM .jeom files (targets jeomlang tools/vscode-extension).",
+    "version": "0.3.0",
+    "publisher": "local",
+    "private": true,
+    "icon": "assets/icon.png",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/minirang/jeomlang.git"
     },
-  "keywords": [
-    "jeom",
-    "jeomlang",
-    "esolang",
-    "unicode",
-    "vscode"
-  ],
-  "main": "./extension.js",
-  "scripts": {
-    "sync-assets": "node scripts/sync-assets.js",
-    "update-jeom": "node scripts/update-official.js"
-  },
-  "activationEvents": [
-    "onStartupFinished",
-    "onLanguage:jeom",
-    "onCommand:jeom.runFile",
-    "onCommand:jeom.checkFile"
-  ],
-  "engines": {
-    "node": ">=18.0.0",
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Programming Languages"
-  ],
-  "contributes": {
-    "languages": [
-      {
-        "id": "jeom",
-        "aliases": [
-          "JEOM",
-          "jeom"
-        ],
-        "extensions": [
-          ".jeom"
-        ],
-        "configuration": "./language-configuration.json",
-        "icon": {
-          "light": "./assets/icon.png",
-          "dark": "./assets/icon.png"
-        }
-      }
+    "keywords": [
+        "jeom",
+        "jeomlang",
+        "esolang",
+        "unicode",
+        "vscode"
     ],
-    "grammars": [
-      {
-        "language": "jeom",
-        "scopeName": "source.jeom",
-        "path": "./syntaxes/jeom.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "jeom",
-        "path": "./snippets/jeom.code-snippets"
-      }
-    ],
-    "commands": [
-      {
-        "command": "jeom.runFile",
-        "title": "Run JEOM File",
-        "category": "JEOM",
-        "icon": "$(play)"
-      },
-      {
-        "command": "jeom.checkFile",
-        "title": "Check JEOM File",
-        "category": "JEOM",
-        "icon": "$(check)"
-      }
-    ],
-    "menus": {
-      "editor/title": [
-        {
-          "command": "jeom.runFile",
-          "when": "resourceLangId == jeom || resourceExtname == .jeom",
-          "group": "navigation@1"
-        }
-      ],
-      "editor/context": [
-        {
-          "command": "jeom.runFile",
-          "when": "resourceLangId == jeom",
-          "group": "navigation@1"
-        },
-        {
-          "command": "jeom.checkFile",
-          "when": "resourceLangId == jeom",
-          "group": "navigation@2"
-        }
-      ],
-      "explorer/context": [
-        {
-          "command": "jeom.runFile",
-          "when": "resourceExtname == .jeom",
-          "group": "navigation@1"
-        },
-        {
-          "command": "jeom.checkFile",
-          "when": "resourceExtname == .jeom",
-          "group": "navigation@2"
-        }
-      ],
-      "commandPalette": [
-        {
-          "command": "jeom.runFile",
-          "when": "resourceLangId == jeom"
-        },
-        {
-          "command": "jeom.checkFile",
-          "when": "resourceLangId == jeom"
-        }
-      ]
+    "main": "./extension.js",
+    "scripts": {
+        "sync-assets": "node scripts/sync-assets.js",
+        "update-jeom": "node scripts/update-official.js"
     },
-    "keybindings": [
-      {
-        "command": "jeom.runFile",
-        "key": "ctrl+f5",
-        "when": "editorTextFocus && resourceLangId == jeom"
-      }
+    "activationEvents": [
+        "onStartupFinished",
+        "onLanguage:jeom",
+        "onCommand:jeom.runFile",
+        "onCommand:jeom.checkFile"
     ],
-    "configuration": {
-      "title": "JEOM",
-      "properties": {
-        "jeom.cliPath": {
-          "type": "string",
-          "default": "",
-          "description": "Optional path to a JEOM CLI. Supports ${workspaceFolder}. If empty, uses core/cli.js or official/cli.js in the workspace or extension bundle."
+    "engines": {
+        "node": ">=18.0.0",
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "jeom",
+                "aliases": [
+                    "JEOM",
+                    "jeom"
+                ],
+                "extensions": [
+                    ".jeom"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./assets/icon.png",
+                    "dark": "./assets/icon.png"
+                }
+            }
+        ],
+        "grammars": [
+            {
+                "language": "jeom",
+                "scopeName": "source.jeom",
+                "path": "./syntaxes/jeom.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "jeom",
+                "path": "./snippets/jeom.code-snippets"
+            }
+        ],
+        "commands": [
+            {
+                "command": "jeom.runFile",
+                "title": "Run JEOM File",
+                "category": "JEOM",
+                "icon": "$(play)"
+            },
+            {
+                "command": "jeom.checkFile",
+                "title": "Check JEOM File",
+                "category": "JEOM",
+                "icon": "$(check)"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "jeom.runFile",
+                    "when": "resourceLangId == jeom || resourceExtname == .jeom",
+                    "group": "navigation@1"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "jeom.runFile",
+                    "when": "resourceLangId == jeom",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "jeom.checkFile",
+                    "when": "resourceLangId == jeom",
+                    "group": "navigation@2"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "jeom.runFile",
+                    "when": "resourceExtname == .jeom",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "jeom.checkFile",
+                    "when": "resourceExtname == .jeom",
+                    "group": "navigation@2"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "jeom.runFile",
+                    "when": "resourceLangId == jeom"
+                },
+                {
+                    "command": "jeom.checkFile",
+                    "when": "resourceLangId == jeom"
+                }
+            ]
         },
-        "jeom.runCommand": {
-          "type": "string",
-          "default": "",
-          "description": "Optional PowerShell command template for running a JEOM file with an external CLI. Supports ${file}, ${filePath}, ${workspaceFolder}, ${cliPath}, and ${mode}. If empty, the bundled-compatible Node CLI is used."
-        },
-        "jeom.checkCommand": {
-          "type": "string",
-          "default": "",
-          "description": "Optional PowerShell command template for checking a JEOM file with an external CLI. Supports ${file}, ${filePath}, ${workspaceFolder}, ${cliPath}, and ${mode}. If empty, the bundled-compatible Node CLI is used."
-        },
-        "jeom.showCodeLens": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show Run and Check CodeLens actions at the top of JEOM files."
+        "keybindings": [
+            {
+                "command": "jeom.runFile",
+                "key": "ctrl+f5",
+                "when": "editorTextFocus && resourceLangId == jeom"
+            }
+        ],
+        "configuration": {
+            "title": "JEOM",
+            "properties": {
+                "jeom.cliPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional path to a JEOM CLI. Supports ${workspaceFolder}. If empty, uses core/cli.js or official/cli.js in the workspace or extension bundle."
+                },
+                "jeom.runCommand": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional PowerShell command template for running a JEOM file with an external CLI. Supports ${file}, ${filePath}, ${workspaceFolder}, ${cliPath}, and ${mode}. If empty, the bundled-compatible Node CLI is used."
+                },
+                "jeom.checkCommand": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional PowerShell command template for checking a JEOM file with an external CLI. Supports ${file}, ${filePath}, ${workspaceFolder}, ${cliPath}, and ${mode}. If empty, the bundled-compatible Node CLI is used."
+                },
+                "jeom.showCodeLens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show Run and Check CodeLens actions at the top of JEOM files."
+                }
+            }
         }
-      }
     }
-  }
 }
