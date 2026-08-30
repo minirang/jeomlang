@@ -54,13 +54,13 @@ jobs:
                 shell: bash
                 env:
                     GH_TOKEN: ${{ github.token }}
+                    RELEASE_TAG: ${{ github.event.release.tag_name }}
                 run: |
                     git config user.name "github-actions[bot]"
                     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-                    BRANCH="chore/update-changelog-${{ github.event.release.tag_name }}"
+                    BRANCH="chore/update-changelog-$RELEASE_TAG"
                     git checkout "$BRANCH" 2>/dev/null || git checkout -b "$BRANCH"
-
                     git add docs/CHANGELOG.md
 
                     if git diff --cached --quiet; then
@@ -68,12 +68,11 @@ jobs:
                         exit 0
                     fi
 
-                    git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
-
+                    git commit -m "docs(changelog): update for $RELEASE_TAG"
                     git push origin HEAD:"$BRANCH"
 
                     gh pr create \
                         --base main \
                         --head "$BRANCH" \
-                        --title "docs(changelog): update for ${{ github.event.release.tag_name }}" \
-                        --body "Automatically update CHANGELOG for release ${{ github.event.release.tag_name }}."
+                        --title "docs(changelog): update for $RELEASE_TAG" \
+                        --body "Automatically update CHANGELOG for release $RELEASE_TAG."
