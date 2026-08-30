@@ -34,52 +34,44 @@ jobs:
                         context.payload.review.pull_request.number;
 
                         const repo = context.repo;
-
                         let pr;
 
-
                         while (true) {
-                          const response = await github.rest.pulls.get({
-                            owner: repo.owner,
-                            repo: repo.repo,
-                            pull_number: prNumber,
-                          });
+                            const response = await github.rest.pulls.get({
+                                owner: repo.owner,
+                                repo: repo.repo,
+                                pull_number: prNumber,
+                            });
 
-                          pr = response.data;
-                          if (pr.mergeable !== null) {
-                            break;
-                          }
+                            pr = response.data;
+                            if (pr.mergeable !== null) {
+                                break;
+                            }
 
-                          console.log("GitHub이 아직 머지 가능 여부를 계산 중입니다. 5초 후 다시 확인합니다.");
-                          await new Promise(resolve => setTimeout(resolve, 5000));
+                            console.log("GitHub이 아직 머지 가능 여부를 계산 중입니다. 5초 후 다시 확인합니다.");
+                            await new Promise(resolve => setTimeout(resolve, 5000));
                         }
-
 
                         const { data: reviews } = await
                         github.rest.pulls.listReviews({
-                          owner: repo.owner,
-                          repo: repo.repo,
-                          pull_number: prNumber,
+                            owner: repo.owner,
+                            repo: repo.repo,
+                            pull_number: prNumber,
                         });
 
-                        const isApproved = reviews.some(r => r.state ===
-                        'APPROVED');
+                        const isApproved = reviews.some(r => r.state === 'APPROVED');
 
-
-                        console.log(`PR Mergeable 상태: ${pr.mergeable_state}, 승인
-                        여부: ${isApproved}`);
+                        console.log(`PR Mergeable 상태: ${pr.mergeable_state}, 승인여부: ${isApproved}`);
 
                         if (isApproved) {
-                          console.log("승인이 확인되어 충돌이 있어도 병합을 허용합니다.");
-                          return;
+                            console.log("승인이 확인되어 충돌이 있어도 병합을 허용합니다.");
+                            return;
                         }
 
-
-                        if (pr.mergeable === false || pr.mergeable_state ===
-                        'dirty') {
-                          core.setFailed("이 PR에 충돌이 있습니다. 코드를 확인해주세요.");
+                        if (pr.mergeable === false || pr.mergeable_state === 'dirty') {
+                            core.setFailed("이 PR에 충돌이 있습니다. 코드를 확인해주세요.");
                         } else if (pr.mergeable === null) {
-                          core.warning("GitHub이 아직 머지 가능 여부를 계산 중입니다.");
+                            core.warning("GitHub이 아직 머지 가능 여부를 계산 중입니다.");
                         } else {
-                          console.log("충돌 없음, 승인이 있으면 병합 가능합니다.");
+                            console.log("충돌 없음, 승인이 있으면 병합 가능합니다.");
                         }
