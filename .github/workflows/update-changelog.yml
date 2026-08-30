@@ -4,7 +4,6 @@ name: Update CHANGELOG on Release
     release:
         types:
             - published
-    workflow_dispatch:
 
 permissions:
     contents: write
@@ -38,15 +37,15 @@ jobs:
                     RELEASE_DATE=$(date -d "${{ github.event.release.published_at }}" +"%Y-%m-%d")
 
                     {
-                      echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
-                      echo ""
-                      printf '%s\n' "${{ github.event.release.body }}"
+                        echo "## ${{ github.event.release.tag_name }} - ${RELEASE_DATE}"
+                        echo ""
+                        printf '%s\n' "${{ github.event.release.body }}"
 
-                      echo ""
-                      echo "---"
-                      echo ""
+                        echo ""
+                        echo "---"
+                        echo ""
 
-                      cat docs/CHANGELOG.md
+                        cat docs/CHANGELOG.md
                     } > temp.md
 
                     mv temp.md docs/CHANGELOG.md
@@ -65,8 +64,8 @@ jobs:
                     git add docs/CHANGELOG.md
 
                     if git diff --cached --quiet; then
-                      echo "No changes to commit"
-                      exit 0
+                        echo "No changes to commit"
+                        exit 0
                     fi
 
                     git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
@@ -74,7 +73,7 @@ jobs:
                     git push origin HEAD:"$BRANCH"
 
                     gh pr create \
-                      --base main \
-                      --head "$BRANCH" \
-                      --title "docs(changelog): update for ${{ github.event.release.tag_name }}" \
-                      --body "Automatically update CHANGELOG for release ${{ github.event.release.tag_name }}."
+                        --base main \
+                        --head "$BRANCH" \
+                        --title "docs(changelog): update for ${{ github.event.release.tag_name }}" \
+                        --body "Automatically update CHANGELOG for release ${{ github.event.release.tag_name }}."
