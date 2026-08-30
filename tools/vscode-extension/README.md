@@ -1,4 +1,4 @@
-# <img src="assets/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner
+# <img src="assets/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner (한국어)
 
 <p>
   <a href="README.md">📖 <strong>README</strong></a>
@@ -8,7 +8,7 @@
   <a href="ABSORPTION.md">📦 <strong>공식 리포지토리 흡수</strong></a>
 </p>
 
-VS Code에서 점랭(`.jeom`) 파일을 바로 실행하기 위한 확장 프로젝트입니다.  
+VS Code에서 점랭(`.jeom`) 파일을 바로 실행하기 위한 확장 프로젝트입니다.
 공식 [jeomlang](https://github.com/minirang/jeomlang)의 `tools/vscode-extension/`으로 흡수 예정입니다.
 
 원본 점랭 프로젝트:
@@ -142,3 +142,150 @@ npm run update-jeom
 ## 참고
 
 점랭 언어 사양과 예제는 원본 사이트와 원본 GitHub 저장소를 기준으로 확인하세요. 이 저장소는 VS Code 실행 환경을 붙이는 용도입니다.
+
+---
+
+# <img src="assets/icon.png" width="22" alt="JEOM" /> JEOM VS Code Runner (English)
+
+<p>
+  <a href="README.md">📖 <strong>README</strong></a>
+  &nbsp;&nbsp;
+  <a href="COMPATIBILITY.md">🔗 <strong>Compatibility</strong></a>
+  &nbsp;&nbsp;
+  <a href="ABSORPTION.md">📦 <strong>Official Repository Absorption</strong></a>
+</p>
+
+An extension project for running Jeomlang (`.jeom`) files directly in VS Code.
+It is planned to be absorbed into `tools/vscode-extension/` of the official [jeomlang](https://github.com/minirang/jeomlang) repository.
+
+Original Jeomlang project:
+
+- Website: https://jeomlang.vercel.app/
+- GitHub: https://github.com/minirang/jeomlang
+
+The purpose of this repository is not to own or distribute the Jeomlang language itself, but to make it possible to run `.jeom` files in VS Code like Python/C files.
+
+## Features
+
+- `.jeom` file language recognition
+- `.jeom` file icon display
+- Basic syntax highlighting
+- Basic snippets
+- Run the current `.jeom` file with `Ctrl + Shift + B`
+- Run with the Run button in the upper-right corner of the editor
+- `Run JEOM` / `Check JEOM` CodeLens at the top of the file
+- Run from the right-click menu and Command Palette
+- Run using `core/cli.js` or the bundled `official/cli.js`
+- **Cross-platform support**: Windows (PowerShell), Mac/Linux (bash)
+
+## Run Commands
+
+Run the currently open `.jeom` file with the following command:
+
+```powershell
+node ./official/cli.js run <current .jeom file>
+```
+
+Run a syntax check with the following command:
+
+```powershell
+node ./official/cli.js check <current .jeom file>
+```
+
+The extension uses `core/cli.js` from the workspace (official repository) or `official/cli.js` (bundled in this repository).
+
+## Run with Ctrl + Shift + B
+
+1. Open this folder in VS Code.
+2. Open the `.jeom` file you want to run.
+3. Press `Ctrl + Shift + B`.
+4. The `JEOM: Run Current File` task will run.
+
+## Run Button
+
+The Run button and syntax highlighting are VS Code extension features. The extension must currently be installed in the VS Code window for the Run button to appear in the upper-right corner of the editor like Python.
+
+### Recommended: Install as a Local Extension
+
+Run the following command in PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-local-extension.ps1
+```
+
+Then reload VS Code with `Developer: Reload Window` or completely restart it. After that, open a `.jeom` file and the following will appear:
+
+- File language mode: `JEOM`
+- Syntax highlighting
+- `Run JEOM` / `Check JEOM` at the top of the file
+- Play button in the upper-right corner of the editor
+
+### Development Mode: Run with F5
+
+1. Open this repository in VS Code.
+2. Press `F5` to run `Run JEOM VS Code Extension`.
+3. In the newly opened Extension Development Host window, open a `.jeom` file.
+4. Run it using the play button in the upper-right corner of the editor, `Run JEOM` CodeLens, or `Ctrl + F5`.
+
+If F5 does not work properly, using the local installation method above is more stable. If `Ctrl + F5` is recognized as Node debugging in a normal VS Code window, messages such as `Debugger attached` and a long `NODE_OPTIONS` command may be printed. To run it cleanly, use the Run button or `Run JEOM` CodeLens on a `.jeom` file after installing the extension.
+
+When running through the extension, the `.jeom` file can be located outside this repository. By default, `official/cli.js` is used.
+
+## Updating Official Files
+
+Whenever Jeomlang is updated, the files in the `official/` folder can be synchronized to the latest version.
+
+```bash
+npm run update-jeom
+```
+
+This command downloads the following files from the official website into `official/` (the same contents as `core/` and `stdlib/`):
+
+- `official/cli.js` ← `core/cli.js`
+- `official/engine.js` ← `core/engine.js`
+- `official/std.jeom` ← `stdlib/std.jeom`
+
+The update completion time is stored in the `official/.version` file.
+
+## Directly Specify the CLI Path
+
+If you want to use the Jeomlang CLI from another location, specify `jeom.cliPath` in the VS Code settings.
+
+Example:
+
+```json
+{
+  "jeom.cliPath": "${workspaceFolder}/official/cli.js"
+}
+```
+
+If the official CLI uses a different command format or you want to use a global command, you can specify `jeom.runCommand` and `jeom.checkCommand`.
+
+```json
+{
+  "jeom.runCommand": "jeom run ${file}",
+  "jeom.checkCommand": "jeom check ${file}"
+}
+```
+
+See `COMPATIBILITY.md` for details on the compatibility method.
+
+## Included Files
+
+- `.vscode/tasks.json`: Runs the currently open `.jeom` file, default task for `Ctrl + Shift + B`
+- `.vscode/settings.json`: Associates `*.jeom` files and defines the Code Runner extension execution command
+- `.vscode/launch.json`: Extension Development Host launch configuration
+- `.vscode/jeom.code-snippets`: Workspace snippets
+- `official/`: Copies of the official `core/` and `stdlib/` (for standalone extension installation)
+- `ABSORPTION.md`: Guide for absorbing into the official repository's `tools/vscode-extension/`
+- `extension.js`: Run button, CodeLens, right-click menu, Command Palette execution features
+- `scripts/install-local-extension.ps1`: Installs the current extension into the local VS Code extension folder
+- `COMPATIBILITY.md`: Explanation of compatibility with the official CLI/engine
+- `syntaxes/jeom.tmLanguage.json`: Basic TextMate syntax highlighting definition
+- `language-configuration.json`: Comment, bracket, and auto-closing settings
+- `../../assets/img/icon.png`: JEOM file icon (repository root asset)
+- `package.json`: VS Code extension metadata
+
+## Reference
+
+Refer to the original website and original GitHub repository for the Jeomlang language specification and examples. This repository is intended only to provide the VS Code execution environment.

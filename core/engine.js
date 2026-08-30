@@ -1268,7 +1268,8 @@
                     fa = [];
                 for (i = 0; i < n; i++) fa.unshift(this._pop());
                 this.stdout(fmt.replace(/%[sdf]/g, function() {
-                    return String(fa.shift() != null ? fa.shift() : '');
+                    var x = fa.shift();
+                    return String(x != null ? x : '');
                 }));
                 break;
             }

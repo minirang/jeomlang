@@ -1,4 +1,4 @@
-# JEOM Compatibility
+# JEOM Compatibility (한국어)
 
 이 확장은 CLI를 다음 순서로 찾습니다: `core/cli.js` → `official/cli.js` (워크스페이스·확장 번들).
 
@@ -18,7 +18,7 @@ jeomlang/                    (공식 모노레포)
   official/std.jeom
 ```
 
-`official/cli.js`는 같은 폴더의 `engine.js`를 로드합니다.  
+`official/cli.js`는 같은 폴더의 `engine.js`를 로드합니다.
 공식 리포 루트를 VS Code로 열면 `core/cli.js`가 우선됩니다.
 
 ## External CLI Mode
@@ -78,3 +78,86 @@ VS Code extension -> node core/cli.js (또는 official/cli.js) run/check file.je
 - 공식 예제 파일
 - README에 있는 최소 예제
 - 변수, 함수, 조건문, 반복문, 파일 입출력처럼 동작 차이가 나기 쉬운 예제
+
+---
+
+# JEOM Compatibility (English)
+
+This extension looks for the CLI in the following order: `core/cli.js` → `official/cli.js` (workspace · extension bundle).
+
+To maintain compatibility with the official engine, update the `official/` folder to the latest official files with `npm run update-jeom`.
+
+## Bundled Official Files
+
+```text
+jeomlang/                    (official monorepo)
+  core/cli.js
+  core/engine.js
+  stdlib/std.jeom
+
+This repository (standalone extension)/
+  official/cli.js            ← copy of core/cli.js
+  official/engine.js
+  official/std.jeom
+```
+
+`official/cli.js` loads `engine.js` from the same folder.
+When the root of the official repository is opened in VS Code, `core/cli.js` takes priority.
+
+## External CLI Mode
+
+If you want to use the official CLI from another location directly, you can specify a command template in the VS Code settings.
+
+If the official CLI uses the following execution format:
+
+```powershell
+jeom run hello.jeom
+jeom check hello.jeom
+```
+
+Specify the following in the VS Code settings:
+
+```json
+{
+  "jeom.runCommand": "jeom run ${file}",
+  "jeom.checkCommand": "jeom check ${file}"
+}
+```
+
+If the official CLI is a JS file executed with `node`:
+
+```json
+{
+  "jeom.runCommand": "node C:\\path\\to\\official\\cli.js run ${file}",
+  "jeom.checkCommand": "node C:\\path\\to\\official\\cli.js check ${file}"
+}
+```
+
+## Placeholders
+
+The following values can be used in command templates:
+
+- `${file}` or `${filePath}`: Path to the current `.jeom` file
+- `${workspaceFolder}`: Path to the current VS Code workspace
+- `${cliPath}`: CLI path specified by `jeom.cliPath` or the default CLI path
+- `${mode}`: `run` or `check`
+
+Path placeholders are safely quoted in PowerShell.
+
+## Default Mode
+
+If `jeom.runCommand` and `jeom.checkCommand` are left empty, the following path is used:
+
+```text
+VS Code extension -> node core/cli.js (or official/cli.js) run/check file.jeom
+```
+
+## Compatibility Check
+
+To verify compatibility between the official engine and the bundled engine, run the same `.jeom` examples and compare the output, error messages, and exit codes.
+
+Recommended criteria:
+
+- Official example files
+- Minimal examples from the README
+- Examples that are likely to have behavioral differences, such as variables, functions, conditionals, loops, and file I/O

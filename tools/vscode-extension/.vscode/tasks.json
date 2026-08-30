@@ -1,48 +1,48 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "JEOM: Run Current File",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "official/cli.js",
-        "run",
-        "${file}"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "NODE_OPTIONS": "",
-          "VSCODE_INSPECTOR_OPTIONS": ""
-        }
-      },
-      "windows": {
-        "options": {
-          "shell": {
-            "executable": "powershell.exe",
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "JEOM: Run Current File",
+            "type": "shell",
+            "command": "node",
             "args": [
-              "-NoLogo",
-              "-NoProfile",
-              "-ExecutionPolicy",
-              "Bypass",
-              "-Command"
-            ]
-          }
+                "official/cli.js",
+                "run",
+                "${file}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "NODE_OPTIONS": "",
+                    "VSCODE_INSPECTOR_OPTIONS": ""
+                }
+            },
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "powershell.exe",
+                        "args": [
+                            "-NoLogo",
+                            "-NoProfile",
+                            "-ExecutionPolicy",
+                            "Bypass",
+                            "-Command"
+                        ]
+                    }
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": true
+            }
         }
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "clear": true
-      }
-    }
-  ]
+    ]
 }
