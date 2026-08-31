@@ -1,3 +1,14 @@
+## v1.7.9 - 2026-08-31
+
+## Updates
+
+- Prevent duplicate execution of fa.shift()
+- Translate JeomLang vscode extension documents
+- Fix syntax error in package.json
+- Format files
+
+---
+
 ## v1.7.8 - 2026-08-28
 
 ## Updates
