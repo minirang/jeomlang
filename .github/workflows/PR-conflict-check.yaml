@@ -48,8 +48,8 @@ jobs:
                                 break;
                             }
 
-                            console.log("GitHub이 아직 머지 가능 여부를 계산 중입니다. 5초 후 다시 확인합니다.");
-                            await new Promise(resolve => setTimeout(resolve, 5000));
+                            console.log("GitHub이 아직 머지 가능 여부를 계산 중입니다. 10초 후 다시 확인합니다.");
+                            await new Promise(resolve => setTimeout(resolve, 10000));
                         }
 
                         const { data: reviews } = await
