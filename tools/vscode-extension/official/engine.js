@@ -8,7 +8,7 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function() {
     'use strict';
 
-    var VERSION = '1.7.8';
+    var VERSION = '1.7.9';
 
     var DOT_CHARS = new Set([
         '\u002E', '\u00B7', '\u02D9', '\u2022', '\u2024', '\u2025',
